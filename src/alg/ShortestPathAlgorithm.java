@@ -5,9 +5,11 @@ import graph.Path;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 
 /**
@@ -23,21 +25,21 @@ public class ShortestPathAlgorithm {
 	 * @param start		源点
 	 * @param end		终点
 	 * @param matrix	图的邻接矩阵
-	 * @return
+	 * @return	两点之间的所有最短路径
 	 */
-	public static List<Path<Integer>> calculateShortestPath(int start, int end, double[][] matrix){
+	public static List<Path<Integer>> calculateAllShortestPath(int start, int end, double[][] matrix){
 		List<Path<Integer>> shortestPathes = new ArrayList<Path<Integer>>();
 		
-		Queue<Node<Integer>> que = new LinkedList<Node<Integer>>();
-		que.offer(new Node<Integer>(null, start, 1));
+		Queue<Node<Integer>> queue = new LinkedList<Node<Integer>>();
+		queue.offer(new Node<Integer>(null, start, 1));
 		
 		int[] visited = new int[matrix.length];
 		Arrays.fill(visited, 0);
 		
 		int preLevel = 1;
 		visited[start] = preLevel;
-		while(!que.isEmpty()){
-			Node<Integer> cur = que.poll();
+		while(!queue.isEmpty()){
+			Node<Integer> cur = queue.poll();
 			if(cur.name == end){
 				if(preLevel == 1 || cur.level == preLevel){
 					preLevel = cur.level;
@@ -52,12 +54,48 @@ public class ShortestPathAlgorithm {
 					}
 					if(matrix[cur.name][i] < Graph.INF){
 						visited[i] = cur.level + 1;
-						que.offer(new Node<Integer>(cur, i, visited[i]));
+						queue.offer(new Node<Integer>(cur, i, visited[i]));
 					}
 				}
 			}
 		}
 		return shortestPathes;
+	}
+	
+	/**
+	 * 计算图中两点之间的一条最短路径
+	 * @param start		源点
+	 * @param end		终点
+	 * @param matrix	图的邻接矩阵
+	 * @return	两点之间的一条最短路径
+	 */
+	public static Path<Integer> calculateOneShortestPath(int start, int end, double[][] matrix){
+		Path<Integer> resultPath = null;
+		
+		Queue<Node<Integer>> queue = new LinkedList<Node<Integer>>();
+		queue.offer(new Node<Integer>(null, start, 1));
+		
+		Set<Integer> visited = new HashSet<Integer>();
+		visited.add(start);
+		
+		while(!queue.isEmpty()){
+			Node<Integer> cur = queue.poll();
+			if(cur.name.equals(end)){
+				resultPath = Node.generatePath(cur);
+				break;
+			}else{
+				for(int i = 0; i < matrix.length; ++i){
+					if(visited.contains(i)){
+						continue;
+					}
+					if(matrix[cur.name][i] < Graph.INF){
+						visited.add(i);
+						queue.offer(new Node<Integer>(cur, i, cur.level + 1));
+					}
+				}
+			}
+		}
+		return resultPath;
 	}
 	
 	private static void addPath(Node<Integer> n, List<Path<Integer>> result){
@@ -75,15 +113,22 @@ public class ShortestPathAlgorithm {
 	    public Node<E> parent;
 		public int level;
 	    public E name;
-	    Node(int l, E s){
-	    	this(null,s,l);
-	    }
 	    
 	    public Node(Node<E> parent, E value, int level){  
 	        this.parent = parent;  
 	        this.name = value;
 	        this.level = level;
-	    }  
+	    }
+	    
+	    public static Path<Integer> generatePath(Node<Integer> n){
+	        Path<Integer> path = new Path<Integer>(Integer.class);
+	        Node<Integer> p = n;
+	        while(p != null){
+	            path.add(p.name);
+	            p = p.parent; 
+	        }
+	        return path;
+	    }
 	}
 
 }

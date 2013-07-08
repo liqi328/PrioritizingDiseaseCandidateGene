@@ -33,9 +33,52 @@ public class VSSimilarityAlgorithm implements SimilarityAlgorithm {
 	}
 	
 	/**
+	 * 计算两个基因之间的相似性
+	 * */
+	public double calculateSimilarity(int u, int v, double[][] matrix, ShortestPath sp){
+		double similarity = 0.0;
+		if(matrix[u][v] < Graph.INF){
+			similarity = calculateSimilarity_connected(u, v, matrix);
+		}else{
+			similarity = calculateSimilarity_unconnected(u, v, matrix, sp);
+		}
+		return similarity;
+	}
+	
+	
+	/**
 	 * 计算直接相连两个基因之间的相似性
 	 */
-	private double calculateSimilarity_connected(int u, int v, double[][] matrix){
+	protected double calculateSimilarity_connected(int u, int v, double[][] matrix){
+		double similarity = 0.0;
+		
+		double sumAB = 0.0;
+		double sumA2 = 1.0, sumB2 = 1.0;
+		
+		if(matrix[u][v] < Graph.INF){
+			sumAB = 2 * matrix[u][v];
+		}
+		
+		for(int i = 0; i < matrix.length; ++i){
+			if(matrix[u][i] < Graph.INF && matrix[v][i] < Graph.INF){
+				sumAB += matrix[u][i] * matrix[v][i];
+			}
+			if(matrix[u][i] < Graph.INF){
+				sumA2 += matrix[u][i] * matrix[u][i];
+			}
+			if(matrix[v][i] < Graph.INF){
+				sumB2 += matrix[v][i] * matrix[v][i];
+			}
+		}
+		
+		similarity = sumAB / (Math.sqrt(sumA2) * Math.sqrt(sumB2));
+		return similarity;
+	}
+	
+	/**
+	 * 计算直接相连两个基因之间的相似性
+	 */
+	private double calculateSimilarity_connected(int u, int v, double[][] matrix, int test){
 		double similarity = 0.0;
 		
 		byte[] neighbors = new byte[matrix.length];
@@ -62,8 +105,7 @@ public class VSSimilarityAlgorithm implements SimilarityAlgorithm {
 					ai = 1;
 				}else if(i == v){
 					bi = 1;
-				}
-				if(ai < Graph.INF && bi < Graph.INF){
+				}else if(ai < Graph.INF && bi < Graph.INF){
 				}else if(ai < Graph.INF){
 					bi = 0;
 				}else{
@@ -83,7 +125,7 @@ public class VSSimilarityAlgorithm implements SimilarityAlgorithm {
 	/**
 	 * 计算非直接相连的两个基因之间的相似性
 	 * */
-	private double calculateSimilarity_unconnected(int u, int v, double[][] matrix, ShortestPath sp){
+	protected double calculateSimilarity_unconnected(int u, int v, double[][] matrix, ShortestPath sp){
 		double similarity = 1;
 		
 		int[] ret = sp.getShortestPath(v);
@@ -96,10 +138,5 @@ public class VSSimilarityAlgorithm implements SimilarityAlgorithm {
 			similarity = 0.0;
 		}
 		return similarity;
-	}
-	
-	
-	public static void main(String[] args){
-		
 	}
 }

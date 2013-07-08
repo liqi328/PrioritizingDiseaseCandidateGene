@@ -91,7 +91,7 @@ public class AdjGraph implements Graph {
 	}
 
 	@Override
-	public int getNodeIndex(String name) {
+	public Integer getNodeIndex(String name) {
 		return nodes.get(name);
 	}
 	

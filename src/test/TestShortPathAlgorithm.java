@@ -15,10 +15,14 @@ public class TestShortPathAlgorithm {
 		Graph g = TestMain.getGraphFromFile(filename);
 		int start = g.getNodeIndex("1968");
 		int end = g.getNodeIndex("1967");
-		List<Path<Integer>> shortestPathes = ShortestPathAlgorithm.calculateShortestPath(start, end, g.getAdjMatrix());
+		//List<Path<Integer>> shortestPathes = ShortestPathAlgorithm.calculateAllShortestPath(start, end, g.getAdjMatrix());
 		
-		for(Path<Integer> p : shortestPathes){
-			System.out.println(PathUtil.parsePath(p, g));
-		}
+		//for(Path<Integer> p : shortestPathes){
+			//System.out.println(PathUtil.parsePath(p, g));
+		//}
+		
+		System.out.println("-----------------------------------");
+		Path<Integer> path = ShortestPathAlgorithm.calculateOneShortestPath(start, end, g.getAdjMatrix());
+		System.out.println(PathUtil.parsePath(path, g));
 	}
 }

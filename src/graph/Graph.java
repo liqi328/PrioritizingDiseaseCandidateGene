@@ -9,7 +9,7 @@ public interface Graph {
 	public int getEdgeNum();
 	
 	public String getNodeName(int index);
-	public int getNodeIndex(String name);
+	public Integer getNodeIndex(String name);
 	
 	public void addNode(String node);
 	public void addEdge(String from, String to);

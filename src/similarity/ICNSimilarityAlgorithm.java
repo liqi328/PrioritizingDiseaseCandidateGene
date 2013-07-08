@@ -9,21 +9,21 @@ public class ICNSimilarityAlgorithm implements SimilarityAlgorithm {
 		
 		double k_u = 0; 	//结点u的度
 		double k_v = 0;	//结点v的度
-		
 		if(matrix[u][v] < Graph.INF){
 			icn = 2 * matrix[u][v];
-			for(int i = 0; i < matrix.length; ++i){
-				icn += matrix[u][i] < Graph.INF && matrix[v][i] < Graph.INF ? 1 : 0;
-				if(matrix[u][i] < Graph.INF){
-					++k_u;
-				}
-				if(matrix[v][i] < Graph.INF){
-					++k_v;
-				}
+		}
+	
+		for(int i = 0; i < matrix.length; ++i){
+			icn += matrix[u][i] < Graph.INF && matrix[v][i] < Graph.INF ? matrix[u][i] * matrix[v][i] : 0;
+			if(matrix[u][i] < Graph.INF){
+				k_u += matrix[u][i];
+			}
+			if(matrix[v][i] < Graph.INF){
+				k_v += matrix[v][i];
 			}
 		}
 		double divisor = k_u * k_v ;
-		divisor = divisor <= 1 ? 1 : Math.sqrt(divisor);
+		divisor = divisor <= 0.000000001 ? 1 : Math.sqrt(divisor);
 		return icn / divisor;
 	}
 	

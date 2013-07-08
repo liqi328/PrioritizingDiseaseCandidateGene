@@ -2,49 +2,95 @@ package experiment;
 
 import graph.Graph;
 
-import java.util.HashSet;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import reader.DiseaseGeneSeedReader;
 import reader.GraphReader;
+import util.GraphUtil;
+import util.WriterUtil;
+
+
+class InputArgument{
+	private Properties p = new Properties();
+	
+	public InputArgument(){
+		try {
+			//FileInputStream is = new FileInputStream("./input/config.txt");
+			InputStreamReader is = new InputStreamReader(new FileInputStream("./input/config.txt"), "UTF-8");
+			p.load(is);
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String getPpiFilename(){
+		return p.getProperty("ppiFilename");
+	}
+	
+	public String getDiseaseSeedFilename(){
+		return p.getProperty("diseaseSeedFilename");
+	}
+	
+	public String getHprdIdMappingsFileName(){
+		return p.getProperty("hprd_id_mappings");
+	}
+	
+	public String getOutputDir(){
+		File outputDir = new File(p.getProperty("outputDir"));
+		if(!outputDir.exists()){
+			outputDir.mkdir();
+		}
+		return p.getProperty("outputDir");
+	}
+}
 
 public class Main {
 	public static void main(String[] args){
-		String ppiFilename = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/ppi_hprd_id.txt";
-		Graph g = GraphReader.read(ppiFilename);
+		//String ppiFilename = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/ppi_hprd_id.txt";
+		//String diseaseSeedFilename = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/ad_hprdid.txt";
 		
-		Set<Integer> diseaseGeneSeedSet = getDiseaseGeneSeedSet(g);
+		InputArgument input = new InputArgument();
+		String ppiFilename = input.getPpiFilename();
+		String diseaseSeedFilename = input.getDiseaseSeedFilename();
+		
+		Graph g = GraphReader.read(ppiFilename);
+		Set<Integer> diseaseGeneSeedSet = GraphUtil.transformName2GraphNodeIndex(g, 
+				DiseaseGeneSeedReader.read(diseaseSeedFilename));
 		Set<Integer> candidateGeneSet = CandidateGeneGenerator.run(g, diseaseGeneSeedSet);
 		
-		Experiment[] exps = new Experiment[3];
-		exps[0] = new ExperimentICN();
-		exps[1] = new ExperimentVS();
-		exps[2] = new ExperimentECC();
+		WriterUtil.write(input.getOutputDir() + "debug.txt",
+				print_set(GraphUtil.transformGraphNodeIndex2Name(g, diseaseGeneSeedSet)) + 
+				"candidate_gene\n" +
+				print_set(GraphUtil.transformGraphNodeIndex2Name(g, candidateGeneSet)));
 		
-		for(Experiment exp: exps){
+		List<AbstractExperiment> expList = new ArrayList<AbstractExperiment>();
+		expList.add(new ExperimentICN(input));
+		expList.add(new ExperimentECC(input));
+		//expList.add(new ExperimentVS2(input));
+		//expList.add(new ExperimentVS(input));
+		//expList.add(new ExperimentGO(input));
+		//expList.add(new ExperimentVS_GO(input));
+		
+		for(AbstractExperiment exp: expList){
 			exp.run(g, diseaseGeneSeedSet, candidateGeneSet);
 		}
 	}
 	
-	/**
-	 * 将名称转换为图中结点的id
-	 * @param g		PPI
-	 * @return
-	 */
-	private static Set<Integer> getDiseaseGeneSeedSet(Graph g){
-		String diseaseSeedFilename = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/ad_hprdid.txt";
-		Set<String> diseaseGeneSeedSet = DiseaseGeneSeedReader.read(diseaseSeedFilename);
-		
-		return transform2GraphId(g, diseaseGeneSeedSet);
-	}
-	
-	private static Set<Integer> transform2GraphId(Graph g, Set<String> diseaseGeneSeedSet){
-		Set<Integer> result = new HashSet<Integer>();
-		Iterator<String> itr = diseaseGeneSeedSet.iterator();
+	private static String print_set(Set<?> set){
+		StringBuffer sb = new StringBuffer();
+		Iterator<?> itr = set.iterator();
 		while(itr.hasNext()){
-			result.add(g.getNodeIndex(itr.next()));
+			sb.append(itr.next()).append("\n");
 		}
-		return result;
+		return sb.toString();
 	}
 }
