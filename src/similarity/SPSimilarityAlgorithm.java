@@ -4,7 +4,7 @@ import graph.Graph;
 import graph.ShortestPath;
 import alg.DijkstraAlgorithm;
 
-public class VS2SimilarityAlgorithm extends VSSimilarityAlgorithm {
+public class SPSimilarityAlgorithm extends VSSimilarityAlgorithm {
 	/**
 	 * 计算两个基因之间的相似性
 	 * 若u, v 有直接相连的边, 则u, v之间的相似性计算使用calculateSimilarity_connected方式  
@@ -14,7 +14,8 @@ public class VS2SimilarityAlgorithm extends VSSimilarityAlgorithm {
 	 * */
 	public double calculateSimilarity(int u, int v, double[][] matrix, ShortestPath sp){
 		double similarity = 0.0;
-		if(matrix[u][v] < Graph.INF || hasCommonNeighbor(u, v, matrix)){
+		//if(matrix[u][v] < Graph.INF || hasCommonNeighbor(u, v, matrix)){
+		if(matrix[u][v] < Graph.INF){
 			similarity = calculateSimilarity_connected(u, v, matrix);
 		}else{
 			similarity = calculateSimilarity_unconnected(u, v, matrix, sp);

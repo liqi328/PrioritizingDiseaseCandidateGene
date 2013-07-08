@@ -75,10 +75,11 @@ public class Main {
 		List<AbstractExperiment> expList = new ArrayList<AbstractExperiment>();
 		expList.add(new ExperimentICN(input));
 		expList.add(new ExperimentECC(input));
-		//expList.add(new ExperimentVS2(input));
-		//expList.add(new ExperimentVS(input));
-		//expList.add(new ExperimentGO(input));
-		//expList.add(new ExperimentVS_GO(input));
+		expList.add(new ExperimentSP(input));
+		expList.add(new ExperimentVS(input));
+		expList.add(new ExperimentGO(input));
+		expList.add(new ExperimentSP_GO(input));
+		expList.add(new ExperimentVS_GO(input));
 		
 		for(AbstractExperiment exp: expList){
 			exp.run(g, diseaseGeneSeedSet, candidateGeneSet);

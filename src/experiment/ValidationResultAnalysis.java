@@ -21,8 +21,13 @@ public class ValidationResultAnalysis {
 		top_k = k;
 	}
 	
+	/**
+	 * 对使用一个相似性计算方法得到排名Map, 分析targetGene的排名
+	 * @param rankMap
+	 * @return
+	 */
 	public static Map<Integer, Rank> run(Map<Integer, List<Rank>> rankMap){
-		System.out.println("Cross Validation Result Analysis running...");
+		System.out.println("Single method: Cross Validation Result Analysis running...");
 		
 		Map<Integer, Rank> resultMap = new HashMap<Integer, Rank>();
 		
@@ -45,7 +50,49 @@ public class ValidationResultAnalysis {
 			resultMap.put(targetGene, rank);
 		}
 		
-		System.out.println("Cross Validation Result Analysis finished.");
+		System.out.println("Single method: Cross Validation Result Analysis finished.");
+		
+		return resultMap;
+	}
+	
+	
+	/**
+	 * 对使用两种相似性计算方法得到排名Map先进行归一化处理, 在分析targetGene的排名
+	 * @param method1_ranksMap	方法1的ranksMap
+	 * @param method2_ranksMap	方法2的ranksMap
+	 * @return
+	 */
+	public static Map<Integer, Rank> run(Map<Integer, List<Rank>> method1_ranksMap, 
+			Map<Integer, List<Rank>> method2_ranksMap){
+		System.out.println("Two method: Cross Validation Result Analysis running...");
+		
+		Map<Integer, Rank> resultMap = new HashMap<Integer, Rank>();
+		Normalized normalized = new Normalized();
+		
+		Iterator<Entry<Integer, List<Rank>>> itr = method1_ranksMap.entrySet().iterator();
+		Entry<Integer, List<Rank>> entry = null;
+		while(itr.hasNext()){
+			entry = itr.next();
+			Integer targetGene = entry.getKey();
+			List<Rank> vs_rankList = entry.getValue();
+			List<Rank> go_rankList = method2_ranksMap.get(targetGene);
+			
+			vs_rankList = normalized.run(vs_rankList, go_rankList);
+			
+			Collections.sort(vs_rankList);
+			
+			Rank rank = null;
+			for(int i = 0; i < vs_rankList.size(); ++i){
+				rank = vs_rankList.get(i);
+				if(rank.getId().equals(targetGene)){
+					rank.setRank(i + 1);
+					break;
+				}
+			}
+			resultMap.put(targetGene, rank);
+		}
+		
+		System.out.println("Two method: Cross Validation Result Analysis finished.");
 		
 		return resultMap;
 	}

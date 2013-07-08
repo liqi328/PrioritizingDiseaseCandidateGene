@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import similarity.VS2SimilarityAlgorithm;
+import similarity.SPSimilarityAlgorithm;
 import util.WriterUtil;
 
-public class ExperimentVS2 extends AbstractExperiment {
+public class ExperimentSP extends AbstractExperiment {
 
-	public ExperimentVS2(InputArgument input) {
+	public ExperimentSP(InputArgument input) {
 		super(input);
 	}
 
@@ -21,7 +21,7 @@ public class ExperimentVS2 extends AbstractExperiment {
 		System.out.println("Experiment VS2 running...");
 		
 		LeaveOneOutCrossValidationForVS validation = new LeaveOneOutCrossValidationForVS(g);
-		validation.setSimilarityAlgorithm(new VS2SimilarityAlgorithm());
+		validation.setSimilarityAlgorithm(new SPSimilarityAlgorithm());
 		
 		Map<Integer, List<Rank>> ranksMap = validation.run(diseaseGeneSeed, candidateGeneSet);
 		

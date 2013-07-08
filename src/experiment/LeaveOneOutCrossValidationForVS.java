@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import similarity.VS2SimilarityAlgorithm;
+import similarity.SPSimilarityAlgorithm;
 import similarity.VSSimilarityAlgorithm;
 import alg.DijkstraAlgorithm;
 
@@ -78,7 +78,7 @@ public class LeaveOneOutCrossValidationForVS {
 		Map<Integer, ShortestPath> shortestPathMap = new HashMap<Integer, ShortestPath>();
 		
 		double[][] matrix = g.getAdjMatrix();
-		if(this.alg.getClass().getName().equals(VS2SimilarityAlgorithm.class.getName())){
+		if(this.alg.getClass().getName().equals(SPSimilarityAlgorithm.class.getName())){
 			System.out.println("anthor matrix.");
 			double similarity = 0.0;
 			double[][] newMatrix = new double[matrix.length][matrix.length];
