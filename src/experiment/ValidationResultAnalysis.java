@@ -60,14 +60,16 @@ public class ValidationResultAnalysis {
 	 * 对使用两种相似性计算方法得到排名Map先进行归一化处理, 在分析targetGene的排名
 	 * @param method1_ranksMap	方法1的ranksMap
 	 * @param method2_ranksMap	方法2的ranksMap
+	 * @param a_threshhold TODO
 	 * @return
 	 */
 	public static Map<Integer, Rank> run(Map<Integer, List<Rank>> method1_ranksMap, 
-			Map<Integer, List<Rank>> method2_ranksMap){
+			Map<Integer, List<Rank>> method2_ranksMap, double a_threshhold){
 		System.out.println("Two method: Cross Validation Result Analysis running...");
 		
 		Map<Integer, Rank> resultMap = new HashMap<Integer, Rank>();
 		Normalized normalized = new Normalized();
+		normalized.setAthreshhold(a_threshhold);
 		
 		Iterator<Entry<Integer, List<Rank>>> itr = method1_ranksMap.entrySet().iterator();
 		Entry<Integer, List<Rank>> entry = null;
@@ -77,13 +79,13 @@ public class ValidationResultAnalysis {
 			List<Rank> vs_rankList = entry.getValue();
 			List<Rank> go_rankList = method2_ranksMap.get(targetGene);
 			
-			vs_rankList = normalized.run(vs_rankList, go_rankList);
+			List<Rank> new_rankList = normalized.run(vs_rankList, go_rankList);
 			
-			Collections.sort(vs_rankList);
+			Collections.sort(new_rankList);
 			
 			Rank rank = null;
-			for(int i = 0; i < vs_rankList.size(); ++i){
-				rank = vs_rankList.get(i);
+			for(int i = 0; i < new_rankList.size(); ++i){
+				rank = new_rankList.get(i);
 				if(rank.getId().equals(targetGene)){
 					rank.setRank(i + 1);
 					break;
