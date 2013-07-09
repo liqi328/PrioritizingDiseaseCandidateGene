@@ -1,5 +1,6 @@
 package experiment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -41,6 +42,9 @@ public class Normalized {
 		double newScore = 0.0;
 		Rank method1_rank = null;
 		Rank method2_rank = null;
+		Rank newRank = null;
+		List<Rank> newRankList = new ArrayList<Rank>();
+		
 		Iterator<Rank> vsItr = method1_rankList.iterator();
 		while(vsItr.hasNext()){
 			method1_rank = vsItr.next();
@@ -50,10 +54,12 @@ public class Normalized {
 			 * */
 			newScore = a_threshhold * (method1_rank.getScore() / method1_rank_max) +
 					(1 - a_threshhold) * (method2_rank.getScore() / method2_rank_max);
-			method1_rank.setScore(newScore);
+			
+			newRank = new Rank(method1_rank.getId(), newScore);
+			newRankList.add(newRank);
 		}
 		
-		return method1_rankList;
+		return newRankList;
 	}
 	
 	/**
