@@ -123,7 +123,7 @@ public class DAGanalysis {
 		TermVo ti = strToTermMap.get(termi);
 		TermVo tj = strToTermMap.get(termj);
 		if(ti==null||tj==null){
-			System.out.println("lost......");
+			//System.out.println("lost......");
 			return null;
 		}
 //System.out.println(termi+"\t"+ti+"\t"+tj);

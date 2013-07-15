@@ -18,7 +18,7 @@ public class ExperimentSP extends AbstractExperiment {
 	@Override
 	public void run(Graph g, Set<Integer> diseaseGeneSeed,
 			Set<Integer> candidateGeneSet) {
-		System.out.println("Experiment VS2 running...");
+		System.out.println("Experiment SP running...");
 		
 		LeaveOneOutCrossValidationForVS validation = new LeaveOneOutCrossValidationForVS(g);
 		validation.setSimilarityAlgorithm(new SPSimilarityAlgorithm());
@@ -27,10 +27,10 @@ public class ExperimentSP extends AbstractExperiment {
 		
 		Map<Integer, Rank> resultMap = ValidationResultAnalysis.run(ranksMap);
 		
-		WriterUtil.write(input.getOutputDir() + "vs2_validation.txt",
+		WriterUtil.write(input.getOutputDir() + "sp_validation.txt",
 				ValidationResultAnalysis.map2String(g, resultMap));
 		
-		System.out.println("Experiment VS2 finished.\n");
+		System.out.println("Experiment SP finished.\n");
 	}
 
 }

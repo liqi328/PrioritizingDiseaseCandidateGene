@@ -2,6 +2,8 @@ package experiment;
 
 import graph.Graph;
 
+import id.HprdIdMapping;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -10,7 +12,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import reader.HprdIdMapping;
 import reader.HprdIdMappingReader;
 import similarity.GoSimilarityAlgorithm;
 import util.GraphUtil;
@@ -26,7 +27,8 @@ public class ExperimentGO extends AbstractExperiment {
 	public void run(Graph g, Set<Integer> diseaseGeneSeedSet,
 			Set<Integer> candidateGeneSet) {
 		System.out.println("Experiment GO running...");
-		Map<Integer, String> geneSymbolMap = getGeneSymbolMap(g, diseaseGeneSeedSet, candidateGeneSet);
+		//Map<Integer, String> geneSymbolMap = getGeneSymbolMap(g, diseaseGeneSeedSet, candidateGeneSet);
+		Map<Integer, String> geneSymbolMap = getGeneSymbolMap2(g, diseaseGeneSeedSet, candidateGeneSet);
 		
 		//printMap(g, geneSymbolMap);
 		
@@ -34,8 +36,8 @@ public class ExperimentGO extends AbstractExperiment {
 		validation.setSimilarityAlgorithm(new GoSimilarityAlgorithm(geneSymbolMap));
 		
 		Map<Integer, List<Rank>> ranksMap = validation.run(diseaseGeneSeedSet, candidateGeneSet);
-		WriterUtil.write(input.getOutputDir() + "go_validation_rank.txt", 
-				ValidationResultAnalysis.ranksMap2String(g, ranksMap));
+//		WriterUtil.write(input.getOutputDir() + "go_validation_rank.txt", 
+//				ValidationResultAnalysis.ranksMap2String(g, ranksMap));
 		
 		Map<Integer, Rank> resultMap = ValidationResultAnalysis.run(ranksMap);
 		
@@ -70,6 +72,29 @@ public class ExperimentGO extends AbstractExperiment {
 		while(itr.hasNext()){
 			Integer nodeId = itr.next();
 			resultMap.put(nodeId, hprdIdIndexedIdMappingMap.get(g.getNodeName(nodeId)).getGeneSymbol());
+		}
+		return resultMap;
+	}
+	
+	
+	/**
+	 * 返回基因Symbol的map, 其中key=基因的图的内部ID, value = 基因的symbol
+	 * @param g						图
+	 * @param diseaseGeneSeedSet	致病基因集合(图的内部ID)
+	 * @param candidateGeneSet		候选基因集合(图的内部ID)
+	 * @return
+	 */
+	protected Map<Integer, String> getGeneSymbolMap2(Graph g, Set<Integer> diseaseGeneSeedSet,
+			Set<Integer> candidateGeneSet){
+		Set<Integer> graphNodeIdSet = new HashSet<Integer>();
+		graphNodeIdSet.addAll(diseaseGeneSeedSet);
+		graphNodeIdSet.addAll(candidateGeneSet);
+		
+		Map<Integer, String> resultMap = new HashMap<Integer, String>();
+		Iterator<Integer> itr = graphNodeIdSet.iterator();
+		while(itr.hasNext()){
+			Integer nodeId = itr.next();
+			resultMap.put(nodeId, g.getNodeName(nodeId));
 		}
 		return resultMap;
 	}

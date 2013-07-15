@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 /**
@@ -93,6 +94,17 @@ public class ValidationResultAnalysis {
 			}
 			resultMap.put(targetGene, rank);
 		}
+		
+		System.out.println("Two method: Cross Validation Result Analysis finished.");
+		
+		return resultMap;
+	}
+	
+	public static Map<Integer, Rank> run(Map<Integer, List<Rank>> ranksMap, 
+			Set<Integer> neighborSet, double a_threshhold){
+		System.out.println("Two method: Cross Validation Result Analysis running...");
+		
+		Map<Integer, Rank> resultMap = new HashMap<Integer, Rank>();
 		
 		System.out.println("Two method: Cross Validation Result Analysis finished.");
 		

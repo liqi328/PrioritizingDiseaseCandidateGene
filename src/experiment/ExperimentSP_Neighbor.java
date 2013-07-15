@@ -4,6 +4,7 @@ import graph.Graph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,21 +33,16 @@ public class ExperimentSP_Neighbor extends AbstractExperiment{
 		
 		Map<Integer, List<Rank>> sp_ranksMap = sp_validation.run(diseaseGeneSeedSet, candidateGeneSet);
 		
-		
-		Set<Integer> neighborSet = GraphUtil.getNeighbors(g, diseaseGeneSeedSet);
-		
-		caculateNeighborSimilarity(sp_ranksMap, neighborSet, g, 0.5);
-		
 		Map<Integer, List<Rank>> sp_nei_ranksMap = null;
 		Map<Integer, Rank> resultMap = null;
 		for(String a_threshhold : input.getAthreshholdArray()){
 			System.out.println("\t--> a_threshhold = " + a_threshhold);
 			
-			sp_nei_ranksMap = caculateNeighborSimilarity(sp_ranksMap, neighborSet, g, Double.parseDouble(a_threshhold));
+			sp_nei_ranksMap = caculateNeighborSimilarity(sp_ranksMap, g, Double.parseDouble(a_threshhold.trim()));
 			
 			resultMap = ValidationResultAnalysis.run(sp_nei_ranksMap);
 			
-			WriterUtil.write(input.getOutputDir() + "sp_neighbor_validation_"+ a_threshhold +".txt",
+			WriterUtil.write(input.getOutputDir() + "sp_neighbor_validation_"+ a_threshhold.trim() +".txt",
 					ValidationResultAnalysis.map2String(g, resultMap));
 		}
 		
@@ -54,9 +50,12 @@ public class ExperimentSP_Neighbor extends AbstractExperiment{
 	}
 	
 	private Map<Integer, List<Rank>> caculateNeighborSimilarity(Map<Integer, List<Rank>> sp_ranksMap,
-			Set<Integer> neighborSet, Graph g, double a_threshhold){
+			 Graph g, double a_threshhold){
 		SimilarityAlgorithm neighborAlg = new NeighborSimilarityAlgorithm();
 		Map<Integer, List<Rank>> resultMap = new HashMap<Integer, List<Rank>>();
+		
+		Set<Integer> diseaseGeneSeedSet = new HashSet<Integer>();
+		diseaseGeneSeedSet.addAll(sp_ranksMap.keySet());
 		
 		double score = 0.0;
 		Iterator<Entry<Integer, List<Rank>>> ranksItr = sp_ranksMap.entrySet().iterator();
@@ -65,6 +64,10 @@ public class ExperimentSP_Neighbor extends AbstractExperiment{
 			entry = ranksItr.next();
 			List<Rank> newRankList = new ArrayList<Rank>();
 			resultMap.put(entry.getKey(), newRankList);
+			
+			//System.out.println("target gene:" + entry.getKey());
+			diseaseGeneSeedSet.remove(entry.getKey());
+			Set<Integer> neighborSet = GraphUtil.getNeighbors(g, diseaseGeneSeedSet);
 			
 			Iterator<Rank> itr = entry.getValue().iterator();
 			while(itr.hasNext()){
@@ -81,6 +84,8 @@ public class ExperimentSP_Neighbor extends AbstractExperiment{
 				score = rank.getScore() + a_threshhold * score;
 				newRankList.add(new Rank(u, score));
 			}
+			
+			diseaseGeneSeedSet.add(entry.getKey());
 		}
 		
 		return resultMap;

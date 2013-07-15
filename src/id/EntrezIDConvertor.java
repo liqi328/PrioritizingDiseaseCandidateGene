@@ -11,7 +11,7 @@ import util.WriterUtil;
  * @author Liqi
  *
  */
-class EntrezIDConvertor extends IDConvertor{
+public class EntrezIDConvertor extends IDConvertor{
 	@Override
 	protected Map<String, HprdIdMapping> getHprdIdMappingMap() {
 		return HprdIdMappingUtil.getEntrezIdIndexedIdMapping();

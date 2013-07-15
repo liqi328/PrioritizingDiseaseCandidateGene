@@ -24,7 +24,7 @@ public abstract class IDConvertor{
 			if(idMapping != null){
 				hprdIdSet.add(String.valueOf(Integer.parseInt(idMapping.getHrpdId())));
 			}else{
-				System.out.println("id: " + id + " has not find corresponding hprd_id.");
+				//System.out.println("id: " + id + " has not find corresponding hprd_id.");
 			}
 		}
 		
@@ -67,6 +67,11 @@ public abstract class IDConvertor{
 			String id = itr.next();
 			HprdIdMapping idMapping = entrezIdIndexedIdMappingMap.get(id);
 			if(idMapping != null){
+				if(null == idMapping.getOmimId() || idMapping.getOmimId().equals("")
+						|| idMapping.getOmimId().equals("-")){
+					System.out.println("id: " + id + ", corresponding omim_id: " + idMapping.getOmimId());
+					continue;
+				}
 				omimIdSet.add(String.valueOf(Integer.parseInt(idMapping.getOmimId())));
 			}else{
 				System.out.println("id: "+ id + " has not find corresponding omim_id.");
@@ -74,6 +79,16 @@ public abstract class IDConvertor{
 		}
 		
 		return omimIdSet;
+	}
+
+	
+	/**
+	 * 将hprd_id集合, omim_id集合或者entrez_id集合转换成Gene Symbol集合
+	 * @param idSet		hprd_id集合或者entrez_id集合,omim_id集合
+	 * @return			Gene Symbol集合
+	 */
+	public Set<String> converte2symbol(Set<String> idSet){
+		return null;
 	}
 	
 	/**

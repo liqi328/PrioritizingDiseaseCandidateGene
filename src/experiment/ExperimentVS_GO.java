@@ -21,7 +21,7 @@ public class ExperimentVS_GO extends ExperimentGO {
 	public void run(Graph g, Set<Integer> diseaseGeneSeedSet,
 			Set<Integer> candidateGeneSet) {
 		System.out.println("Experiment VS + GO running...");
-		Map<Integer, String> geneSymbolMap = getGeneSymbolMap(g, diseaseGeneSeedSet, candidateGeneSet);
+		Map<Integer, String> geneSymbolMap = getGeneSymbolMap2(g, diseaseGeneSeedSet, candidateGeneSet);
 		
 		LeaveOneOutCrossValidationForVS vs_validation = new LeaveOneOutCrossValidationForVS(g);
 		vs_validation.setSimilarityAlgorithm(new VSSimilarityAlgorithm());
@@ -33,10 +33,16 @@ public class ExperimentVS_GO extends ExperimentGO {
 		
 		Map<Integer, List<Rank>> go_ranksMap = go_validation.run(diseaseGeneSeedSet, candidateGeneSet);
 		
-		Map<Integer, Rank> resultMap = ValidationResultAnalysis.run(vs_ranksMap, go_ranksMap);
-		
-		WriterUtil.write(input.getOutputDir() + "vs_go_validation.txt",
-				ValidationResultAnalysis.map2String(g, resultMap));
+		Map<Integer, Rank> resultMap = null;
+		for(String a_threshhold : input.getAthreshholdArray()){
+			System.out.println("\t--> a_threshhold = " + a_threshhold);
+			
+			resultMap = ValidationResultAnalysis.run(vs_ranksMap, go_ranksMap, 
+					Double.parseDouble(a_threshhold.trim()));
+			
+			WriterUtil.write(input.getOutputDir() + "vs_go_validation_" + a_threshhold.trim() + ".txt",
+					ValidationResultAnalysis.map2String(g, resultMap));
+		}
 		
 		System.out.println("Experiment VS + GO finished.\n");
 	}

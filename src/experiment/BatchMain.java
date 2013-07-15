@@ -22,7 +22,6 @@ public class BatchMain {
 			System.out.println("" + (i++) + "--------------------"+ config +"-------------------");
 			Main.main(new String[]{config});
 		}
-		
 	}
 	
 	private static List<String> readConfigFilenames(String filename){

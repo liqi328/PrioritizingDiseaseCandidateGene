@@ -27,8 +27,8 @@ public class GraphReader {
 		String[] cols = null;
 		while((line = in.readLine()) != null){
 			cols = line.split(" |\t|,");
-			g.addNode(cols[0]);
-			g.addNode(cols[1]);
+			g.addNode(cols[0].trim());
+			g.addNode(cols[1].trim());
 		}
 		
 		in.close();
@@ -38,14 +38,17 @@ public class GraphReader {
 		BufferedReader in = new BufferedReader(new FileReader(new File(filename)));
 		String line = null;
 		String[] cols = null;
+		double w = 1.0;
 		while((line = in.readLine()) != null){
 			cols = line.split(" |\t|,");
-			if(cols.length > 2){
-				g.addEdge(cols[0], cols[1], Double.parseDouble(cols[2]));
-			}else{
-				g.addEdge(cols[0], cols[1], 1);
+			/* È¥³ý×Ô»· */
+			if(cols[0].equals(cols[1])){
+				continue;
 			}
-			//g.addEdge(cols[0], cols[1], Double.parseDouble(cols[2]));
+			if(cols.length > 2){
+				w = Double.parseDouble(cols[2]);
+			}
+			g.addEdge(cols[0].trim(), cols[1].trim(), w);
 		}
 		
 		in.close();
