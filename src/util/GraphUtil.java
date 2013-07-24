@@ -1,5 +1,6 @@
 package util;
 
+
 import graph.Graph;
 
 import java.util.HashSet;
@@ -21,7 +22,7 @@ public class GraphUtil {
 		while(itr.hasNext()){
 			name = itr.next();
 			if(g.getNodeIndex(name) == null){
-				//System.out.println("Gene Hprd_id is not int the ppi_hprd_id.txt: " + name);
+				System.out.println("Gene Hprd_id is not int the ppi_hprd_id.txt: " + name);
 				continue;
 			}
 			result.add(g.getNodeIndex(name));

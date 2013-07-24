@@ -68,19 +68,19 @@ public class OmimIDConvertor extends IDConvertor{
 		
 		IDConvertor convertor = new OmimIDConvertor();
 		
-//		Set<String> hprdIdSet = convertor.converte2hprdId(omimIdset);		
-//		WriterUtil.write("E:/2013疾病研究/实验数据/prioritizing_candidate_gene/ad_pd_sca/ad_hprdid.txt", hprdIdSet);
-//		
-//		WriterUtil.write("E:/2013疾病研究/实验数据/prioritizing_candidate_gene/ad_pd_sca/ad_id_mapping.txt",
-//				convertor.getHprdIdMappingSet(omimIdset));
-//		
-//		Set<String> entrezIdset = convertor.converte2entrezId(omimIdset);
-//		WriterUtil.write("E:/2013疾病研究/实验数据/prioritizing_candidate_gene/ad_pd_sca/ad_entrezid.txt", entrezIdset);
+		Set<String> hprdIdSet = convertor.converte2hprdId(omimIdset);		
+		WriterUtil.write(filename + "hprd_id.txt", hprdIdSet);
 		
-		Set<String> symbolSet = convertor.converte2symbol(omimIdset);
-		WriterUtil.write(filename + "symbol.txt", symbolSet);
+		WriterUtil.write(filename + "id_mapping.txt",
+				convertor.getHprdIdMappingSet(omimIdset));
 		
-		WriterUtil.write(filename + "omimid.txt", omimIdset);
+		Set<String> entrezIdset = convertor.converte2entrezId(omimIdset);
+		WriterUtil.write(filename + "entrez_id.txt", entrezIdset);
+		
+//		Set<String> symbolSet = convertor.converte2symbol(omimIdset);
+//		WriterUtil.write(filename + "symbol.txt", symbolSet);
+		
+		//WriterUtil.write(filename + "omimid.txt", omimIdset);
 	}
 	
 	public static void main(String[] args){

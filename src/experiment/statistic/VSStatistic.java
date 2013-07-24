@@ -10,8 +10,8 @@ public class VSStatistic extends AbstractStatistic {
 	}
 
 	@Override
-	public FileFilter createFileFilter() {
-		return new ResultFileFilter("vs_");
+	protected FileFilter createFileFilter() {
+		return new ResultFileFilter("vs_validation_" + a_threshhold);
 	}
 
 	@Override

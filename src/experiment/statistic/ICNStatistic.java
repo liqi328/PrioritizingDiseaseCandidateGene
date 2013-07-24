@@ -11,7 +11,7 @@ public class ICNStatistic extends AbstractStatistic{
 	
 	@Override
 	protected FileFilter createFileFilter() {
-		return new ResultFileFilter("icn_");
+		return new ResultFileFilter("icn_validation");
 	}
 
 	@Override

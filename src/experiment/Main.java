@@ -14,7 +14,6 @@ import java.util.Set;
 import reader.DiseaseGeneSeedReader;
 import reader.GraphReader;
 import util.GraphUtil;
-import util.WriterUtil;
 
 
 class InputArgument{
@@ -88,16 +87,18 @@ public class Main {
 		run_single_method(input, g, diseaseGeneSeedSet, candidateGeneSet);
 		
 		run_combined_method(input, g, diseaseGeneSeedSet, candidateGeneSet);
+		//AbstractExperiment experiment = new ExperimentSD(input);
+		//experiment.run(g, diseaseGeneSeedSet, candidateGeneSet);
 	}
 	
 	public static void run_single_method(InputArgument input, Graph g, Set<Integer> diseaseGeneSeedSet,
 			Set<Integer> candidateGeneSet){
 		List<AbstractExperiment> expList = new ArrayList<AbstractExperiment>();
 		expList.add(new ExperimentICN(input));
-		expList.add(new ExperimentECC(input));
-		expList.add(new ExperimentGO(input));
-		expList.add(new ExperimentSP(input));
+		//expList.add(new ExperimentECC(input));
+		//expList.add(new ExperimentGO(input));
 		expList.add(new ExperimentVS(input));
+		expList.add(new ExperimentSP(input));
 		
 		for(AbstractExperiment exp: expList){
 			exp.run(g, diseaseGeneSeedSet, candidateGeneSet);
@@ -109,7 +110,7 @@ public class Main {
 		List<AbstractExperiment> expList = new ArrayList<AbstractExperiment>();
 		expList.add(new ExperimentSP_GO(input));
 		expList.add(new ExperimentVS_GO(input));
-		expList.add(new ExperimentSP_Neighbor(input));
+		//expList.add(new ExperimentSP_Neighbor(input));
 		
 		for(AbstractExperiment exp: expList){
 			exp.run(g, diseaseGeneSeedSet, candidateGeneSet);

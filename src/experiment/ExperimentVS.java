@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import similarity.SimilarityAlgorithm;
 import similarity.VSSimilarityAlgorithm;
 import util.WriterUtil;
 
@@ -21,14 +22,22 @@ public class ExperimentVS extends AbstractExperiment {
 		System.out.println("Experiment VS running...");
 		
 		LeaveOneOutCrossValidationForVS validation = new LeaveOneOutCrossValidationForVS(g);
-		validation.setSimilarityAlgorithm(new VSSimilarityAlgorithm());
+		VSSimilarityAlgorithm alg = new VSSimilarityAlgorithm();
+		validation.setSimilarityAlgorithm(alg);
 		
-		Map<Integer, List<Rank>> ranksMap = validation.run(diseaseGeneSeed, candidateGeneSet);
+		String[] r_threshhold = {"2", "3", "4", "1000000"};
 		
-		Map<Integer, Rank> resultMap = ValidationResultAnalysis.run(ranksMap);
+		for(String r : r_threshhold){
+			alg.setR_Theshhold(Integer.parseInt(r));
+			
+			Map<Integer, List<Rank>> ranksMap = validation.run(diseaseGeneSeed, candidateGeneSet);
+			
+			Map<Integer, Rank> resultMap = ValidationResultAnalysis.run(ranksMap);
+			
+			WriterUtil.write(input.getOutputDir() + "vs_validation_"+ r +".txt",
+					ValidationResultAnalysis.map2String(g, resultMap));
+		}
 		
-		WriterUtil.write(input.getOutputDir() + "vs_validation.txt",
-				ValidationResultAnalysis.map2String(g, resultMap));
 		
 		System.out.println("Experiment VS finished.\n");
 	}

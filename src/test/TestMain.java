@@ -1,6 +1,7 @@
 package test;
 
 import graph.Graph;
+import graph.GraphHelper;
 import graph.ShortestPath;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class TestMain {
 	private static final int INF = Graph.INF;   
 	
 	public static void main(String[] args){
-		test_dijkstra();
+		//test_dijkstra();
 		test_dijkstra_2();
 		//test_dijkstra(getGraphMatrixFromConsole());
 	}
@@ -58,6 +59,10 @@ public class TestMain {
 		
 		String filename = "E:/2013¼²²¡ÑÐ¾¿/À¼Î°/test.txt";
 		Graph g = getGraphFromFile(filename);
+		
+		System.out.println("Is Graph connected: "+GraphHelper.isConnected(g));
+		System.out.println("Connected components: " + GraphHelper.countConnectedComponent(g));
+		
 		int start = g.getNodeIndex("0");
 		ShortestPath sp = DijkstraAlgorithm.dijsktra(start, g.getAdjMatrix());
         //System.out.println(sp.toString());

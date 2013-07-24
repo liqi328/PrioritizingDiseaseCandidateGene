@@ -30,7 +30,7 @@ public class HprdIdMappingReader{
 	public Map<String, HprdIdMapping> read() {
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(new File(filename)));
-			String line = in.readLine();
+			String line = null;
 			HprdIdMapping hm = null;
 			while((line = in.readLine()) != null){
 				hm = createHprdIdMapping(line);

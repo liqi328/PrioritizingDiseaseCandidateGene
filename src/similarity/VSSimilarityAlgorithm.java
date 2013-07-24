@@ -8,7 +8,7 @@ import java.util.Arrays;
 import alg.DijkstraAlgorithm;
 
 public class VSSimilarityAlgorithm implements SimilarityAlgorithm {
-	private static int R_THRESHHOLD = 4000000; // 最短路径长度
+	private int R_THRESHHOLD = 4000000; // 最短路径长度
 	
 	public void setR_Theshhold(int r){
 		R_THRESHHOLD = r;
@@ -130,7 +130,7 @@ public class VSSimilarityAlgorithm implements SimilarityAlgorithm {
 		
 		int[] ret = sp.getShortestPath(v);
 		/* a,b 之间存在最短路径 && 最短路径的长度 <= r*/
-		if(sp.getShortestPathWeight(v) < Graph.INF && ret.length <= R_THRESHHOLD){
+		if(sp.getShortestPathWeight(v) < Graph.INF && (ret.length - 1) <= R_THRESHHOLD){
 			for(int i = ret.length - 1; i > 0; --i){
 				similarity *= calculateSimilarity_connected(ret[i], ret[i - 1], matrix);
 			}

@@ -44,6 +44,7 @@ public class ValidationResultAnalysis {
 			for(int i = 0; i < rankList.size(); ++i){
 				rank = rankList.get(i);
 				if(rank.getId().equals(targetGene)){
+					rank = new Rank(rank.getId(), rank.getScore());
 					rank.setRank(i + 1);
 					break;
 				}

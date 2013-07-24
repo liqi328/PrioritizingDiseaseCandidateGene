@@ -33,7 +33,7 @@ public class OrphanetDiseaseGeneReaderAndWriter {
 				if(orphanetDiseaseGeneMap.get(cols[1]) == null){
 					orphanetDiseaseGeneMap.put(cols[1], new ArrayList<String>());
 				}
-				orphanetDiseaseGeneMap.get(cols[1]).add(cols[3]);
+				orphanetDiseaseGeneMap.get(cols[1]).add(cols[2]);
 			}
 			
 			reader.close();
@@ -67,10 +67,10 @@ public class OrphanetDiseaseGeneReaderAndWriter {
 	}
 	
 	public static void main(String[] args){
-		String filename = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/orphanet_input/172_ODs.txt";
+		String filename = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/input_hprd/172_ODs.txt";
 		Map<String, List<String>> orphanetDiseaseGeneMap = OrphanetDiseaseGeneReaderAndWriter.read(filename);
 		
-		String outputDir = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/orphanet_input/";
+		String outputDir = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/input_hprd/";
 		OrphanetDiseaseGeneReaderAndWriter.write(outputDir, orphanetDiseaseGeneMap);
 	}
 }
