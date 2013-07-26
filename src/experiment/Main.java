@@ -14,6 +14,7 @@ import java.util.Set;
 import reader.DiseaseGeneSeedReader;
 import reader.GraphReader;
 import util.GraphUtil;
+import util.WriterUtil;
 
 
 class InputArgument{
@@ -81,8 +82,8 @@ public class Main {
 				DiseaseGeneSeedReader.read(diseaseSeedFilename));
 		Set<Integer> candidateGeneSet = CandidateGeneGenerator.run(g, diseaseGeneSeedSet);
 		
-//		WriterUtil.write(input.getOutputDir() + "random_candidate_gene.txt",
-//				GraphUtil.transformGraphNodeIndex2Name(g, candidateGeneSet)); 
+		WriterUtil.write(input.getOutputDir() + "random_candidate_gene.txt",
+				GraphUtil.transformGraphNodeIndex2Name(g, candidateGeneSet)); 
 		
 		run_single_method(input, g, diseaseGeneSeedSet, candidateGeneSet);
 		
@@ -96,7 +97,7 @@ public class Main {
 		List<AbstractExperiment> expList = new ArrayList<AbstractExperiment>();
 		expList.add(new ExperimentICN(input));
 		//expList.add(new ExperimentECC(input));
-		//expList.add(new ExperimentGO(input));
+		expList.add(new ExperimentGO(input));
 		expList.add(new ExperimentVS(input));
 		expList.add(new ExperimentSP(input));
 		

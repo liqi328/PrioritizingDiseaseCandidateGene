@@ -27,8 +27,7 @@ public class ExperimentGO extends AbstractExperiment {
 	public void run(Graph g, Set<Integer> diseaseGeneSeedSet,
 			Set<Integer> candidateGeneSet) {
 		System.out.println("Experiment GO running...");
-		//Map<Integer, String> geneSymbolMap = getGeneSymbolMap(g, diseaseGeneSeedSet, candidateGeneSet);
-		Map<Integer, String> geneSymbolMap = getGeneSymbolMap2(g, diseaseGeneSeedSet, candidateGeneSet);
+		Map<Integer, String> geneSymbolMap = getGeneSymbolMap(g, diseaseGeneSeedSet, candidateGeneSet);
 		
 		//printMap(g, geneSymbolMap);
 		
@@ -48,6 +47,7 @@ public class ExperimentGO extends AbstractExperiment {
 	}
 	
 	/**
+	 * PPI为hprd
 	 * 返回基因Symbol的map, 其中key=基因的图的内部ID, value = 基因的symbol
 	 * @param g						图
 	 * @param diseaseGeneSeedSet	致病基因集合(图的内部ID)
@@ -78,6 +78,7 @@ public class ExperimentGO extends AbstractExperiment {
 	
 	
 	/**
+	 * PPI为symbol
 	 * 返回基因Symbol的map, 其中key=基因的图的内部ID, value = 基因的symbol
 	 * @param g						图
 	 * @param diseaseGeneSeedSet	致病基因集合(图的内部ID)

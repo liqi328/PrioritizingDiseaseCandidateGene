@@ -21,7 +21,7 @@ public class ExperimentVS_GO extends ExperimentGO {
 	public void run(Graph g, Set<Integer> diseaseGeneSeedSet,
 			Set<Integer> candidateGeneSet) {
 		System.out.println("Experiment VS + GO running...");
-		Map<Integer, String> geneSymbolMap = getGeneSymbolMap2(g, diseaseGeneSeedSet, candidateGeneSet);
+		Map<Integer, String> geneSymbolMap = getGeneSymbolMap(g, diseaseGeneSeedSet, candidateGeneSet);
 		
 		LeaveOneOutCrossValidationForVS vs_validation = new LeaveOneOutCrossValidationForVS(g);
 		vs_validation.setSimilarityAlgorithm(new VSSimilarityAlgorithm());
