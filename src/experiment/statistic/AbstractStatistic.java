@@ -1,5 +1,8 @@
 package experiment.statistic;
 
+import id.HprdIdMapping;
+import id.HprdIdMappingUtil;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
@@ -7,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import util.FileUtil;
 import experiment.Rank;
@@ -69,7 +73,7 @@ public abstract class AbstractStatistic{
 		return true;
 	}
 	
-	private List<Rank> readRankList(File file){
+	protected List<Rank> readRankList(File file){
 		List<Rank> rankList = new ArrayList<Rank>();
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(file));
@@ -90,6 +94,31 @@ public abstract class AbstractStatistic{
 		return rankList;
 	}
 	
+	protected String readRankingGene(File file, int top_k){
+		StringBuffer sb = new StringBuffer();
+		
+		Map<String, HprdIdMapping> hprdIdIndexedIdMappingMap = HprdIdMappingUtil.getHprdIdIndexIdMapping();
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(file));
+			String line = null;
+			String[] cols = null;
+			int i = 0;
+			
+			HprdIdMapping hprdMapping = null;
+			while((line = in.readLine()) != null && i < top_k){
+				cols = line.split("\t");
+				hprdMapping = hprdIdIndexedIdMappingMap.get(cols[0]);
+				sb.append(hprdMapping.getGeneSymbol()).append(",");
+				//sb.append(cols[0]).append("] ");
+				++i;
+			}
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return sb.toString();
+	}
+	
 	protected final List<File> parseResultFiles(){
 		List<File> retFileList = new ArrayList<File>();
 		for(File dir: resultDirs){
@@ -107,23 +136,30 @@ public abstract class AbstractStatistic{
 	
 	protected abstract FileFilter createFileFilter();
 	
+	protected abstract FileFilter createFileFilter(String filterString);
 	
-	class ResultFileFilter implements FileFilter{
-		private String filterString;
-		
-		public ResultFileFilter(String filterString){
-			this.filterString = filterString;
-		}
-		
-		@Override
-		public boolean accept(File pathname) {
-			if(pathname.isDirectory()){
-				return false;
-			}
-			if(pathname.getName().startsWith(filterString)){
-				return true;
-			}
+	
+	
+	/* 候选基因排序--统计 */
+	
+	protected abstract String run_ranking_statistic(File dir, int top_k);
+}
+
+class ResultFileFilter implements FileFilter{
+	private String filterString;
+	
+	public ResultFileFilter(String filterString){
+		this.filterString = filterString;
+	}
+	
+	@Override
+	public boolean accept(File pathname) {
+		if(pathname.isDirectory()){
 			return false;
 		}
+		if(pathname.getName().startsWith(filterString)){
+			return true;
+		}
+		return false;
 	}
 }

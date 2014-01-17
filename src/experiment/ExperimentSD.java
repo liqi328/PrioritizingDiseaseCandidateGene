@@ -75,4 +75,11 @@ public class ExperimentSD extends AbstractExperiment {
 		return maxNodeId;
 	}
 
+	@Override
+	public void ranking(Graph g, Set<Integer> diseaseGeneSet,
+			Set<Integer> candidateGeneSet) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

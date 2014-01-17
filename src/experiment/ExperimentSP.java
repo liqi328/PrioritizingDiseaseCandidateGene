@@ -2,10 +2,12 @@ package experiment;
 
 import graph.Graph;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import similarity.ICNSimilarityAlgorithm;
 import similarity.SPSimilarityAlgorithm;
 import util.WriterUtil;
 
@@ -31,6 +33,22 @@ public class ExperimentSP extends AbstractExperiment {
 				ValidationResultAnalysis.map2String(g, resultMap));
 		
 		System.out.println("Experiment SP finished.\n");
+	}
+
+	@Override
+	public void ranking(Graph g, Set<Integer> diseaseGeneSet,
+			Set<Integer> candidateGeneSet) {
+		System.out.println("Ranking candidate gene using SPranker algorithm. [start]");
+		
+		LeaveOneOutCrossValidationForVS validation = new LeaveOneOutCrossValidationForVS(g);
+		validation.setSimilarityAlgorithm(new SPSimilarityAlgorithm());
+		
+		List<Rank> rankList = validation.run_rank(diseaseGeneSet, candidateGeneSet);
+		Collections.sort(rankList);
+		
+		writeRankList(g, input.getOutputDir() + "sp_candidate_gene_rank.txt", rankList);
+		
+		System.out.println("Finished.");
 	}
 
 }

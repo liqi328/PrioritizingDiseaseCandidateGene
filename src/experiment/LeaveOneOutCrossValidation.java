@@ -1,6 +1,7 @@
 package experiment;
 
 import graph.Graph;
+import graph.ShortestPath;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -89,6 +90,12 @@ public class LeaveOneOutCrossValidation {
 			rankList.add(new Rank(v, score));
 		}
 		
+		return rankList;
+	}
+	
+	
+	public List<Rank> run_rank(Set<Integer> diseaseGeneSet, Set<Integer> candidateGeneSet){
+		List<Rank> rankList = run_one_validation_trial(diseaseGeneSet, candidateGeneSet);
 		return rankList;
 	}
 }

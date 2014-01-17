@@ -4,6 +4,7 @@ import graph.Graph;
 
 import id.HprdIdMapping;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,6 +15,7 @@ import java.util.Set;
 
 import reader.HprdIdMappingReader;
 import similarity.GoSimilarityAlgorithm;
+import similarity.SPSimilarityAlgorithm;
 import util.GraphUtil;
 import util.WriterUtil;
 
@@ -110,5 +112,22 @@ public class ExperimentGO extends AbstractExperiment {
 		}
 		WriterUtil.write(input.getOutputDir() + "go_validation.txt",
 				sb.toString());
+	}
+
+	@Override
+	public void ranking(Graph g, Set<Integer> diseaseGeneSet,
+			Set<Integer> candidateGeneSet) {
+		System.out.println("Ranking candidate gene using GO algorithm. [start]");
+		Map<Integer, String> geneSymbolMap = getGeneSymbolMap(g, diseaseGeneSet, candidateGeneSet);
+		
+		LeaveOneOutCrossValidation validation = new LeaveOneOutCrossValidation(g);
+		validation.setSimilarityAlgorithm(new GoSimilarityAlgorithm(geneSymbolMap));
+		
+		List<Rank> rankList = validation.run_rank(diseaseGeneSet, candidateGeneSet);
+		Collections.sort(rankList);
+		
+		writeRankList(g, input.getOutputDir() + "go_candidate_gene_rank.txt", rankList);
+		
+		System.out.println("Finished.");		
 	}
 }

@@ -3,6 +3,7 @@ package experiment;
 import graph.Graph;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
@@ -37,6 +38,37 @@ public class CandidateGeneGenerator {
 			}
 			candidateGeneSet.add(index);
 			++i;
+		}
+		
+		return candidateGeneSet;
+	}
+	
+	/**
+	 * 把致病基因的直接邻居作为候选基因
+	 * @param g
+	 * @param diseaseGeneSet
+	 * @return
+	 */
+	public static Set<Integer> run_neighbor(Graph g, Set<Integer> diseaseGeneSet){
+		Set<Integer> candidateGeneSet = new HashSet<Integer>();
+		double[][] adjMatrix = g.getAdjMatrix();
+		
+		Iterator<Integer> itr = diseaseGeneSet.iterator();
+		while(itr.hasNext()){
+			Integer nodeIndex = itr.next();
+			for(int j = 0; j < g.getNodeNum(); ++j){
+				if(adjMatrix[nodeIndex][j] < Graph.INF){
+					candidateGeneSet.add(j);
+				}
+			}
+		}
+		
+		itr = candidateGeneSet.iterator();
+		while(itr.hasNext()){
+			Integer nodeIdex = itr.next();
+			if(diseaseGeneSet.contains(nodeIdex)){
+				itr.remove();
+			}
 		}
 		
 		return candidateGeneSet;

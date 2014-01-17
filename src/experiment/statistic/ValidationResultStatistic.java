@@ -1,15 +1,10 @@
 package experiment.statistic;
 
 import java.io.File;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import util.FileUtil;
-import util.WriterUtil;
 
 
 public class ValidationResultStatistic {

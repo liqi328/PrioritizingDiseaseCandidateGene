@@ -134,6 +134,14 @@ public class LeaveOneOutCrossValidationForVS {
 		
 		return rankList;
 	}
+	
+	public List<Rank> run_rank(Set<Integer> diseaseGeneSet, Set<Integer> candidateGeneSet){
+		Map<Integer, ShortestPath> shortestPathMap = calculateShortestPath(diseaseGeneSet, candidateGeneSet);
+		
+		List<Rank> rankList = run_one_validation_trial(diseaseGeneSet, candidateGeneSet, shortestPathMap);
+		return rankList;
+	}
+	
 //	
 //	private void print_shortestpath(Map<Integer, ShortestPath> shortestPathMap, String name, Set<Integer> diseaseGeneSeed){
 //		StringBuffer sb = new StringBuffer();

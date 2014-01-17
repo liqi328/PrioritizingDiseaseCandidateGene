@@ -33,4 +33,11 @@ public class ExperimentECC extends AbstractExperiment {
 		System.out.println("Experiment ECC finished.\n");
 	}
 
+	@Override
+	public void ranking(Graph g, Set<Integer> diseaseGeneSet,
+			Set<Integer> candidateGeneSet) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

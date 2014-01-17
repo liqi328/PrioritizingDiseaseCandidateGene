@@ -90,7 +90,12 @@ public class ExperimentSP_Neighbor extends AbstractExperiment{
 		
 		return resultMap;
 	}
+
+	@Override
+	public void ranking(Graph g, Set<Integer> diseaseGeneSet,
+			Set<Integer> candidateGeneSet) {
+		// TODO Auto-generated method stub
+		
+	}
 	
-		
-		
 }

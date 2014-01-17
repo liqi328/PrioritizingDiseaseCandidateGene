@@ -17,10 +17,23 @@ public class BatchMain {
 		
 		List<String> configFilenames = readConfigFilenames(args[0]);
 		
+		//run_validation(configFilenames);
+		run_ranking(configFilenames);
+	}
+	
+	public static void run_validation(List<String> configFilenames){
 		int i = 1;
 		for(String config : configFilenames){
 			System.out.println("" + (i++) + "--------------------"+ config +"-------------------");
 			Main.main(new String[]{config});
+		}
+	}
+	
+	public static void run_ranking(List<String> configFilenames){
+		int i = 1;
+		for(String config : configFilenames){
+			System.out.println("" + (i++) + "--------------------"+ config +"-------------------");
+			RankingMain.main(new String[]{config});
 		}
 	}
 	

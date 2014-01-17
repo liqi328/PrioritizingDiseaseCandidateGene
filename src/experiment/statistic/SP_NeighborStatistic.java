@@ -22,4 +22,17 @@ public class SP_NeighborStatistic extends AbstractStatistic {
 	protected void printLogFooter() {
 		System.out.println("--------------- SP_Neighbor statistic finished -------------");
 	}
+
+	@Override
+	protected FileFilter createFileFilter(String filterString) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected String run_ranking_statistic(File dir, int top_k) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

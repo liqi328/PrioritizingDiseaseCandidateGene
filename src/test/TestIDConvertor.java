@@ -14,13 +14,14 @@ import java.util.Set;
 
 import reader.GraphReader;
 import reader.OrphanetDiseaseGeneReaderAndWriter;
+import util.FileUtil;
 import util.GraphUtil;
 import util.WriterUtil;
 
 public class TestIDConvertor {
 	public static void main(String[] args){
-		//test_2();
-		generateConfigFiles();
+		test_2();
+		//generateConfigFiles();
 		//isAllOrphanetDiseaseGeneInThePPI();
 	}
 	
@@ -84,6 +85,12 @@ public class TestIDConvertor {
 			
 			tmpSb.append("\t-->appear in the ppi_hprd: " + nodeSet.size()).append("\n");
 			tmpSb.append("---------------------------------------").append("\n");
+			
+			String name = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/input_hprd/" + entry.getKey()+"/";
+			Set<String> hprdIdSet2 = GraphUtil.transformGraphNodeIndex2Name(g, nodeSet);
+			WriterUtil.write(name + entry.getKey()+ "_hprd_id2.txt", hprdIdSet2);
+			//File deleteFile = new File(name + entry.getKey()+ "_hprd_id2.txt");
+			
 			
 			WriterUtil.write(dir.getAbsolutePath() + 
 					"/" + entry.getKey() + "_omim_id.txt", 
