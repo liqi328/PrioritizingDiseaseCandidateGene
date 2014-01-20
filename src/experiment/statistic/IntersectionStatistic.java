@@ -12,9 +12,20 @@ import java.util.Set;
 import util.FileUtil;
 import experiment.Rank;
 
+/*
+ * 我们对根据SPranker、SPGOranker和ICN、VS的候选基因排名算法的交叉验证结果进行了比较。
+ * 这里考察任何两种方法排名第一的基因中，相同基因的数目，实验结果如表1所示。从表1中可以看出SPranker、SPGOranker、VS、ICN排名第一分别有402、407、394、348。由此表明我们的方法比另外两种有一些提高。
+ * SPranker与VS、ICN的交集分别是309、268；SPGOranker与VS、ICN的交集分别是311、270；
+ * VS与ICN之间的交集有264。
+ * */
 public class IntersectionStatistic {
 	public static void main(String[] args){
-		String dirName = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/output_hprd";
+		//run_1();
+		run_2();
+	}
+	
+	public static void run_1(){
+		String dirName = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/output_hprd0726";
 		File[] dirs = FileUtil.getDirectoryList(dirName);
 		
 		List<String> icnTopOneSet = run_1(dirs, "icn_validation");
@@ -31,6 +42,42 @@ public class IntersectionStatistic {
 		System.out.println("spgo - vs: " + intersection(spgoTopOneSet, vsTopOneSet).size());
 		System.out.println("spgo - icn: " + intersection(spgoTopOneSet, icnTopOneSet).size());
 		System.out.println("spgo - sp: " + intersection(spgoTopOneSet, spTopOneSet).size());
+	}
+	
+	public static void run_2(){
+		String dirName = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/output_hprd0726";
+		File[] dirs = FileUtil.getDirectoryList(dirName);
+		
+		List<String> icnTopOneSet = run_1(dirs, "icn_validation");
+		List<String> spTopOneSet = run_1(dirs, "sp_validation");
+		List<String> spgoTopOneSet = run_1(dirs, "sp_go_validation_0.8");
+		List<String> vsTopOneSet = run_1(dirs, "vs_validation_2");
+		
+		String dirName2 = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/DADA/172OrphanetDisease/dada_output";
+		File[] dirs2 = FileUtil.getDirectoryList(dirName2);
+		
+		List<String> dadaTopOneSet = run_1(dirs2, "dada_validation");
+		List<String> rwrTopOneSet = run_1(dirs2, "rwr_validation");
+		
+		System.out.println("sp - icn: " + intersection(spTopOneSet, icnTopOneSet).size());
+		System.out.println("sp - vs: " + intersection(spTopOneSet, vsTopOneSet).size());
+		System.out.println("sp - spgo: " + intersection(spTopOneSet, spgoTopOneSet).size());
+		System.out.println("sp - dada: " + intersection(spTopOneSet, dadaTopOneSet).size());
+		System.out.println("sp - rwr: " + intersection(spTopOneSet, rwrTopOneSet).size());
+		
+		System.out.println("spgo0.8 - vs: " + intersection(spgoTopOneSet, vsTopOneSet).size());
+		System.out.println("spgo0.8 - icn: " + intersection(spgoTopOneSet, icnTopOneSet).size());
+		System.out.println("spgo0.8 - dada: " + intersection(spgoTopOneSet, dadaTopOneSet).size());
+		System.out.println("spgo0.8 - rwr: " + intersection(spgoTopOneSet, rwrTopOneSet).size());
+		
+		System.out.println("icn - vs: " + intersection(icnTopOneSet, vsTopOneSet).size());
+		System.out.println("icn - dada: " + intersection(icnTopOneSet, dadaTopOneSet).size());
+		System.out.println("icn - rwr: " + intersection(icnTopOneSet, rwrTopOneSet).size());
+		
+		System.out.println("vs - dada: " + intersection(vsTopOneSet, dadaTopOneSet).size());
+		System.out.println("vs - rwr: " + intersection(vsTopOneSet, rwrTopOneSet).size());
+		
+		System.out.println("rwr - dada: " + intersection(rwrTopOneSet, dadaTopOneSet).size());
 	}
 	
 	public static Set<String> intersection(List<String> A, List<String> B){

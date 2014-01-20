@@ -16,6 +16,10 @@ import java.util.Set;
 import util.FileUtil;
 import util.WriterUtil;
 
+/*
+ * 产生交叉验证的输入数据：使用的候选基因是随机产生的。
+ * */
+
 public class GenerateValidationDataForDADA {
 	private static String dir = "dada_input/";
 	

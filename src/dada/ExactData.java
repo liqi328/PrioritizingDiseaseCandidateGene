@@ -20,8 +20,8 @@ import util.WriterUtil;
  * 	3: seedSet.txt		种子基因集合
  * */
 public class ExactData {
-	private static String inputDir = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/input_hprd";
-	private static String outputDir = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/output_hprd0726/";
+	private static String inputDir = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/神经退行性疾病/input_hprd";
+	private static String outputDir = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/神经退行性疾病/output_hprd0726/";
 	
 	public static void main(String[] args){
 		File[] dirs = FileUtil.getDirectoryList(inputDir);
@@ -56,7 +56,7 @@ public class ExactData {
 	public static void copySeedGeneFile(File dest, File from){
 		File[] files = FileUtil.getFileList(from.getAbsolutePath());
 		for(File f: files){
-			if(f.getName().contains("_hprd_id2.txt")){
+			if(f.getName().contains("_hprd_id.txt")){
 				File destFile = new File(dest.getAbsolutePath()+"/" + from.getName() + "_hprd_id.txt");
 				//FileUtil.copy(f, destFile);
 				append1toline(destFile, f);

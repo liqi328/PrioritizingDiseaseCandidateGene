@@ -34,6 +34,12 @@ public class TestIDConvertor {
 		OrphanetDiseaseGeneReaderAndWriter.write(outputDir, orphanetDiseaseGeneMap);
 	}
 	
+	public static void test_3(){
+		String outputDir = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/DADA/神经退行性/dada_input";
+		String ppiFilename = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/DADA/神经退行性/dada_input/ppi_hprd_id.txt";
+		Graph g = GraphReader.read(ppiFilename);
+	}
+	
 	public static void test_2(){
 		String filename = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/input_hprd/172_ODs.txt";
 		String outputDir = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/input_hprd/";

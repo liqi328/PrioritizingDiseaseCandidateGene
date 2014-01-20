@@ -11,7 +11,7 @@ import util.FileUtil;
 import util.WriterUtil;
 
 public class DADAResultPreProcess {
-	private static String dirName = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/DADA/dada_output";
+	private static String dirName = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/DADA/神经退行性/dada_output";
 	
 	public static void main(String[] args){
 		File[] diseasesDir = FileUtil.getDirectoryList(dirName);

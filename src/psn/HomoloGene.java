@@ -92,7 +92,7 @@ public class HomoloGene {
 		String outputFilename = "E:/2013疾病研究/疾病数据/HomoloGene/HomoSapiens_SaccharomycesCerevisiae.txt";
 		
 		BufferedReader in = new BufferedReader(new FileReader(homoloGeneFilename));
-		BufferedWriter out = new BufferedWriter(new FileWriter(outputFilename));
+		//BufferedWriter out = new BufferedWriter(new FileWriter(outputFilename));
 		
 		Map<Integer, List<HomoloGeneData>> homoGeneDataMap = new TreeMap<Integer, List<HomoloGeneData>>();
 		
@@ -115,7 +115,7 @@ public class HomoloGene {
 			}
 		}
 		in.close();
-		out.close();
+		//out.close();
 		
 		return homoGeneDataMap;
 	}

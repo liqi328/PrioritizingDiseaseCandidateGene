@@ -12,7 +12,7 @@ public class DADAValidationResultStatistic {
 	}
 	
 	public static void run(){
-		String dirName = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/DADA/dada_output";
+		String dirName = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/DADA/神经退行性/dada_output";
 		
 		File[] dirs = FileUtil.getDirectoryList(dirName);
 		

@@ -3,6 +3,8 @@ package experiment.statistic;
 import java.io.File;
 import java.io.FileFilter;
 
+import util.FileUtil;
+
 public class RWRStatistic  extends AbstractStatistic {
 
 	public RWRStatistic(File[] resultDirs) {
@@ -26,14 +28,17 @@ public class RWRStatistic  extends AbstractStatistic {
 
 	@Override
 	protected FileFilter createFileFilter(String filterString) {
-		//return new ResultFileFilter("dada_candidate_gene_rank");
-		return null;
+		return new ResultFileFilter("rwr_rank");
 	}
 	
 	public String run_ranking_statistic(File dir, int top_k){
 		StringBuffer sb = new StringBuffer();
 		
-		System.out.println("Œ¥ µœ÷RWR");
+		File[] files = FileUtil.getFileList(dir.getPath(), createFileFilter(""));
+		sb.append("RWR\t");
+		for(File file : files){
+			sb.append(readRankingGene(file, top_k));
+		}
 		return sb.toString();
 	}
 
