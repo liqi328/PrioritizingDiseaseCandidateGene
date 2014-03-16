@@ -16,4 +16,5 @@ public interface Graph {
 	public void addEdge(String from, String to, double w);
 	
 	public boolean containsEdge(String a, String b);
+	public boolean containsNode(String node);
 }

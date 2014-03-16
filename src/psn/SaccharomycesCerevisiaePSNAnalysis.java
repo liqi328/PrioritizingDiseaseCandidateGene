@@ -32,78 +32,179 @@ public class SaccharomycesCerevisiaePSNAnalysis {
 		String[] header = DataReader.readMutantPValueData(saccPSNFilename,mutantDataList);
 		System.out.println(header.length);
 		
-		calculateGeneExpressionChanges(mutantDataList, header, diseaseGeneSet, sacc2humanGeneMap);
+		String filename = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/PSN/orfCode_geneName.txt";
+		Map<String, String> orfGeneMap = HomoloGene.readOrfCodeGeneName(filename);
 		
-		calculateDeletionMutantsAffectedGeneCount(mutantDataList, header, diseaseGeneSet, sacc2humanGeneMap);
+		Map<String, String> experimentListMap = DataReader.readExperimentList();
+		
+		calculateGeneExpressionChanges(mutantDataList, header, diseaseGeneSet, sacc2humanGeneMap, orfGeneMap, experimentListMap);
+		
+		calculateDeletionMutantsAffectedGeneCount(mutantDataList, header, diseaseGeneSet, sacc2humanGeneMap, orfGeneMap, experimentListMap);
 	}
 	
-	private static void calculateGeneExpressionChanges(List<MutantPValueData> mutantDataList, String[] header, Set<String> diseaseGeneSet, Map<String, List<String>> sacc2humanGeneMap) throws IOException{
+	private static void calculateGeneExpressionChanges(List<MutantPValueData> mutantDataList, String[] header, Set<String> diseaseGeneSet,
+			Map<String, List<String>> sacc2humanGeneMap, Map<String, String> orfGeneMap, Map<String, String> experimentListMap) throws IOException{
 		StringBuffer sb = new StringBuffer();
 		
-		sb.append("orfCode\t基因名称\t是否是疾病基因\t被影响的次数\t其中被疾病基因影响的次数\t影响的基因\t其中致病基因\n");
+		//sb.append("orfCode\t基因名称\t是否是疾病基因\t被影响的次数\t其中被疾病基因影响的次数\t影响的基因\t其中致病基因\n");
+		sb.append("orfCode\t基因名称\t同源基因\t同源基因中的疾病基因\tdeletionMutant基因的个数\tdeletionMutant基因中的疾病基因的个数\tdeletionMutant基因\tdeletionMutant基因中的疾病基因\tdeletionMutant基因的同源基因的个数\tdeletionMutant基因的同源基因中的致病基因的个数\tdeletionMutant基因的同源基因\tdeletionMutant基因的同源基因中的致病基因\n");
 		
 		for(MutantPValueData pValueData: mutantDataList){
 			sb.append(pValueData.orfCode).append("\t");
+			if(pValueData.geneName == null || "".equals(pValueData.geneName)){
+				pValueData.geneName = orfGeneMap.get(pValueData.orfCode);
+				if(pValueData.geneName == null){
+					pValueData.geneName = "";
+				}
+				//System.out.println(pValueData.orfCode + "---" + pValueData.geneName);
+			}
 			sb.append(pValueData.geneName).append("\t");
 			
-			if(diseaseGeneSet.contains(pValueData.geneName)){
-				sb.append("Yes").append("\t");
-			}else{
-				sb.append("No").append("\t");
+			if(sacc2humanGeneMap.get(pValueData.geneName) != null){
+				for(String s : sacc2humanGeneMap.get(pValueData.geneName)){
+					sb.append(s + ", ");
+				}
 			}
+			sb.append("\t");
+			
+			if(sacc2humanGeneMap.get(pValueData.geneName) != null){
+				for(String s : sacc2humanGeneMap.get(pValueData.geneName)){
+					if(diseaseGeneSet.contains(s)){
+						sb.append(s + ", ");
+					}
+				}
+			}
+			sb.append("\t");
+
 			
 			int totalCount = 0;
 			int diseaseGeneCount = 0;
 			
 			StringBuffer totalGeneBuffer = new StringBuffer();
 			StringBuffer diseaseGeneBuffer = new StringBuffer();
+			StringBuffer homologyTotalGeneBuffer = new StringBuffer();//影响的基因的同源基因
+			StringBuffer homologyDiseaseGeneBufferGeneBuffer = new StringBuffer();//其中的致病基因的同源基因
+			
+			int homologyTotalCount = 0;
+			int homologyDiseaseGeneCount = 0;
 			
 			int i = 1;
 			for(Double value: pValueData.pValueList){
 				++i;
 				if(value < PSN.P_VALUE_THRESHOLD){
 					++totalCount;
-					totalGeneBuffer.append(header[i]).append(",");
-					if(diseaseGeneSet.contains(header[i])){
+					String geneName = orfGeneMap.get(experimentListMap.get(header[i]).split(",")[0].toUpperCase());
+					if(geneName == null || "".equals(geneName)){
+						geneName = "";
+						//System.out.println(header[i]);
+					}else{
+						geneName = geneName.toUpperCase();
+					}
+					totalGeneBuffer.append(geneName).append(",");
+					if(diseaseGeneSet.contains(geneName)){
 						diseaseGeneCount++;
-						diseaseGeneBuffer.append(header[i]).append(",");
+						diseaseGeneBuffer.append(geneName).append(",");
+					}
+					
+					if(sacc2humanGeneMap.get(geneName) != null){
+						++homologyTotalCount;
+						for(String s : sacc2humanGeneMap.get(geneName)){
+							homologyTotalGeneBuffer.append(s).append(",");
+							
+							if(diseaseGeneSet.contains(s)){
+								homologyDiseaseGeneCount++;
+								homologyDiseaseGeneBufferGeneBuffer.append(s).append(",");
+							}
+						}
 					}
 				}
 			}
 			sb.append(totalCount).append("\t");
 			sb.append(diseaseGeneCount).append("\t");
 			sb.append(totalGeneBuffer.toString()).append("\t");
-			sb.append(diseaseGeneBuffer.toString()).append("\n");
+			sb.append(diseaseGeneBuffer.toString()).append("\t");
+			sb.append(homologyTotalCount).append("\t");
+			sb.append(homologyDiseaseGeneCount).append("\t");
+			sb.append(homologyTotalGeneBuffer.toString()).append("\t");
+			sb.append(homologyDiseaseGeneBufferGeneBuffer.toString()).append("\n");
 		}
 		
 		WriterUtil.write("E:/2013疾病研究/实验数据/prioritizing_candidate_gene/PSN/SaccharomycesCerevisiae_psn/gene2deletionMutant.txt", sb.toString());
 	}
 	
-	public static void calculateDeletionMutantsAffectedGeneCount(List<MutantPValueData> mutantDataList, String[] header, Set<String> diseaseGeneSet, Map<String, List<String>> sacc2humanGeneMap) throws IOException{
+	public static void calculateDeletionMutantsAffectedGeneCount(List<MutantPValueData> mutantDataList, String[] header, Set<String> diseaseGeneSet, 
+			Map<String, List<String>> sacc2humanGeneMap, Map<String, String> orfGeneMap, Map<String, String> experimentListMap) throws IOException{
 		StringBuffer sb = new StringBuffer();
-		sb.append("基因名称\t是否是疾病基因\t影响的基因个数\t其中疾病基因个数\t被影响的基因\t其中致病基因\n");
+		sb.append("ExperimentName\tORF code\tdeletionMutant基因名称\t同源基因\t同源基因中的疾病基因\t影响的基因个数\t影响的基因中的疾病基因个数\t影响的基因\t影响的基因中的致病基因\t影响的基因的同源基因的个数\t影响的基因的同源基因中的致病基因的个数\t影响的基因的同源基因\t影响的基因的同源基因中的致病基因\n");
 		
 		for(int i = 2; i < header.length; ++i){
+			sb.append(header[i]).append("\t");
+			sb.append(experimentListMap.get(header[i])).append("\t");
+			String geneName = orfGeneMap.get(experimentListMap.get(header[i]).split(",")[0].toUpperCase());
+			if(geneName == null || "".equals(geneName)){
+				geneName = "";
+				//System.out.println(header[i]);
+			}else{
+				geneName = geneName.toUpperCase();
+			}
+			sb.append(geneName).append("\t");
+			
+			if(sacc2humanGeneMap.get(geneName) != null){
+				for(String s : sacc2humanGeneMap.get(geneName)){
+					sb.append(s + ", ");
+				}
+			}
+			sb.append("\t");
+			
+			if(sacc2humanGeneMap.get(geneName) != null){
+				for(String s : sacc2humanGeneMap.get(geneName)){
+					if(diseaseGeneSet.contains(s)){
+						sb.append(s + ", ");
+					}
+				}
+			}
+			sb.append("\t");
+			
+			StringBuffer totalGeneBuffer = new StringBuffer();//影响的基因
+			StringBuffer diseaseGeneBuffer = new StringBuffer();//其中的疾病基因
+			
+			StringBuffer homologyTotalGeneBuffer = new StringBuffer();//影响的基因的同源基因
+			StringBuffer homologyDiseaseGeneBufferGeneBuffer = new StringBuffer();//其中的致病基因的同源基因
+			
 			int totalCount = 0;
 			int diseaseGeneCount = 0;
 			
-			StringBuffer totalGeneBuffer = new StringBuffer();
-			StringBuffer diseaseGeneBuffer = new StringBuffer();
+			int homologyTotalCount = 0;
+			int homologyDiseaseGeneCount = 0;
 			
-			sb.append(header[i]).append("\t");
-			if(diseaseGeneSet.contains(header[i])){
-				sb.append("Yes").append("\t");
-			}else{
-				sb.append("No").append("\t");
-			}
-			
-			for(MutantPValueData data : mutantDataList){
-				if(data.pValueList.get(i-2) < PSN.P_VALUE_THRESHOLD){
+			for(MutantPValueData pValueData : mutantDataList){
+				if(pValueData.pValueList.get(i-2) < PSN.P_VALUE_THRESHOLD){
+					if(pValueData.geneName == null || "".equals(pValueData.geneName)){
+						pValueData.geneName = orfGeneMap.get(pValueData.orfCode);
+						if(pValueData.geneName == null){
+							pValueData.geneName = "";
+						}
+						geneName = geneName.toUpperCase();
+						//System.out.println(pValueData.orfCode + "---" + pValueData.geneName);
+					}
 					++totalCount;
-					totalGeneBuffer.append(data.geneName).append(",");
-					if(diseaseGeneSet.contains(data.geneName)){
+					totalGeneBuffer.append(pValueData.geneName).append(",");
+					
+					if(diseaseGeneSet.contains(pValueData.geneName)){
 						diseaseGeneCount++;
-						diseaseGeneBuffer.append(data.geneName).append(",");
+						diseaseGeneBuffer.append(pValueData.geneName).append(",");
+					}
+					
+					if(sacc2humanGeneMap.get(pValueData.geneName) != null){
+						++homologyTotalCount;
+						for(String s : sacc2humanGeneMap.get(pValueData.geneName)){
+							homologyTotalGeneBuffer.append(s).append(",");
+							
+							if(diseaseGeneSet.contains(s)){
+								homologyDiseaseGeneCount++;
+								homologyDiseaseGeneBufferGeneBuffer.append(s).append(",");
+							}
+						}
 					}
 				}
 			}
@@ -112,7 +213,11 @@ public class SaccharomycesCerevisiaePSNAnalysis {
 			sb.append(totalCount).append("\t");
 			sb.append(diseaseGeneCount).append("\t");
 			sb.append(totalGeneBuffer.toString()).append("\t");
-			sb.append(diseaseGeneBuffer.toString()).append("\n");
+			sb.append(diseaseGeneBuffer.toString()).append("\t");
+			sb.append(homologyTotalCount).append("\t");
+			sb.append(homologyDiseaseGeneCount).append("\t");
+			sb.append(homologyTotalGeneBuffer.toString()).append("\t");
+			sb.append(homologyDiseaseGeneBufferGeneBuffer.toString()).append("\n");
 		}
 		
 		WriterUtil.write("E:/2013疾病研究/实验数据/prioritizing_candidate_gene/PSN/SaccharomycesCerevisiae_psn/deletionMutant2gene.txt", sb.toString());

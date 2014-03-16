@@ -40,7 +40,7 @@ public class HumanPSNAnalysis {
 	private static void calculateGeneExpressionChanges(List<MutantPValueData> mutantDataList, String[] header, Set<String> diseaseGeneSet) throws IOException{
 		StringBuffer sb = new StringBuffer();
 		
-		sb.append("orfCode\t基因名称\t是否是疾病基因\t被影响的次数\t其中被疾病基因影响的次数\t影响的基因\t其中致病基因\n");
+		sb.append("orfCode\t基因名称\t是否是疾病基因\tdeletionMutant基因的个数\tdeletionMutant基因中的疾病基因的个数\tdeletionMutant基因\tdeletionMutant基因中的疾病基因\n");
 		
 		for(MutantPValueData pValueData: mutantDataList){
 			sb.append(pValueData.orfCode).append("\t");
@@ -81,7 +81,7 @@ public class HumanPSNAnalysis {
 	
 	public static void calculateDeletionMutantsAffectedGeneCount(List<MutantPValueData> mutantDataList, String[] header, Set<String> diseaseGeneSet) throws IOException{
 		StringBuffer sb = new StringBuffer();
-		sb.append("基因名称\t是否是疾病基因\t影响的基因个数\t其中疾病基因个数\t被影响的基因\t其中致病基因\n");
+		sb.append("deletionMutant基因名称\t是否是疾病基因\t影响的基因个数\t影响的基因中疾病基因个数\t影响的基因\t影响的基因中的致病基因\n");
 		
 		for(int i = 2; i < header.length; ++i){
 			int totalCount = 0;

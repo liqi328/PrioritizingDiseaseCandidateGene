@@ -16,7 +16,7 @@ import util.FileUtil;
 import experiment.Rank;
 
 class StatisticResult{
-	public static final int RANK = 100;
+	public static final int RANK = 102;
 	public int totalValidation = 0;
 	public int[] rankArray = new int[RANK];
 }

@@ -21,9 +21,7 @@ public class PSN {
 	
 	public static void main(String[] args){
 		try {
-			analysisPSN();
-			//readSacc2HumanGeneRelation();
-			//transferSaccPSN2HumanPSN();
+			transferSaccPSN2HumanPSN();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -99,75 +97,6 @@ public class PSN {
 		
 		WriterUtil.write("E:/2013疾病研究/实验数据/prioritizing_candidate_gene/PSN/humanPSN.txt",
 				sb.toString());
-	}
-	
-	public static void analysisPSN() throws IOException{
-		//String inputFilename = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/PSN/data_expts1-300_"+ DataReader.ErrorModel + "_pvalue_processed_final.txt";
-		String inputFilename = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/PSN/humanPSN.txt";
-		
-		List<MutantPValueData> mutantDataList = new ArrayList<MutantPValueData>();
-		
-		String[] header = DataReader.readMutantPValueData(inputFilename,mutantDataList);
-		//System.out.println(header.length);
-		
-		calculateGeneExpressionChanges(mutantDataList);
-		
-		calculateDeletionMutantsAffectedGeneCount(mutantDataList, header);
-	}
-	
-	private static void calculateGeneExpressionChanges(List<MutantPValueData> mutantDataList) throws IOException{
-		StringBuffer sb = new StringBuffer();
-		
-		String filename = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/PSN/orfCode_geneName.txt";
-		Map<String, String> orfGeneMap = HomoloGene.readOrfCodeGeneName(filename);
-		
-		for(MutantPValueData pValueData: mutantDataList){
-			sb.append(pValueData.orfCode).append("\t");
-			sb.append(pValueData.geneName).append("\t");
-			//sb.append(orfGeneMap.get(pValueData.orfCode)).append("\t");
-			
-			int count = 0;
-			for(Double value: pValueData.pValueList){
-				if(value < P_VALUE_THRESHOLD){
-					++count;
-				}
-			}
-			sb.append(count).append("\n");
-		}
-		
-		WriterUtil.write("E:/2013疾病研究/实验数据/prioritizing_candidate_gene/PSN/geneChanges.txt", sb.toString());
-	}
-	
-	public static void calculateDeletionMutantsAffectedGeneCount(List<MutantPValueData> mutantDataList, String[] header) throws IOException{
-		Map<String, String> experimentListMap = DataReader.readExperimentList();
-		
-		String filename = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/PSN/orfCode_geneName.txt";
-		Map<String, String> orfGeneMap = HomoloGene.readOrfCodeGeneName(filename);
-		
-		StringBuffer sb = new StringBuffer();
-		
-		for(int i = 2; i < header.length; ++i){
-			int count = 0;
-			
-//			for(String key: experimentListMap.keySet()){
-//				if(header[i].contains(key)){
-//					sb.append(key).append("\t");
-//					sb.append(experimentListMap.get(key)).append("\t");
-//					sb.append(orfGeneMap.get(experimentListMap.get(key).split(",")[0].toUpperCase())).append("\t");
-//					break;
-//				}
-//			}
-			sb.append(header[i]).append("\t");
-			for(MutantPValueData data : mutantDataList){
-				if(data.pValueList.get(i-2) < P_VALUE_THRESHOLD){
-					++count;
-				}
-			}
-			
-			sb.append(count).append("\n");
-		}
-		
-		WriterUtil.write("E:/2013疾病研究/实验数据/prioritizing_candidate_gene/PSN/deletionMutantAffecteds.txt", sb.toString());
 	}
 	
 	public static Map<String, List<String>> readSacc2HumanGeneRelation() throws IOException{

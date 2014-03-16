@@ -84,6 +84,10 @@ public class AdjGraph implements Graph {
 		return false;
 	}
 	
+	public boolean containsNode(String node){
+		return nodes.containsKey(node);
+	}
+	
 	@Override
 	public String getNodeName(int index) {
 		return idIndexNodes.get(index);

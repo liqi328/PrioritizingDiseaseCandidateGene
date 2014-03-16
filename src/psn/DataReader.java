@@ -62,7 +62,13 @@ public class DataReader {
 		
 		while((line = in.readLine()) != null){
 			cols = line.split("\t");
-			pValueData = new MutantPValueData(cols[0], cols[1]);
+			String geneName = "";
+			if(cols[1] == null || "".equals(cols[1])){
+				geneName = "";
+			}else{
+				geneName = cols[1].split(",")[0];
+			}
+			pValueData = new MutantPValueData(cols[0], geneName);
 			
 			for(int i = 2; i < cols.length; ++i){
 				pValueData.pValueList.add(Double.parseDouble(cols[i]));
