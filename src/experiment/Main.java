@@ -32,16 +32,32 @@ class InputArgument{
 		}
 	}
 	
+	public InputArgument(){
+		
+	}
+	
 	public String getPpiFilename(){
 		return p.getProperty("ppiFilename");
+	}
+	
+	public void setPpiFilename(String ppiFilename){
+		p.setProperty("ppiFilename", ppiFilename);
 	}
 	
 	public String getDiseaseSeedFilename(){
 		return p.getProperty("diseaseSeedFilename");
 	}
 	
+	public void setDiseaseSeedFilename(String diseaseSeedFilename){
+		p.setProperty("diseaseSeedFilename", diseaseSeedFilename);
+	}
+	
 	public String getHprdIdMappingsFileName(){
 		return p.getProperty("hprd_id_mappings");
+	}
+	
+	public void setHprdIdMappingsFileName(String hprd_id_mappings){
+		p.setProperty("hprd_id_mappings", hprd_id_mappings);
 	}
 	
 	public String getOutputDir(){
@@ -52,6 +68,10 @@ class InputArgument{
 		return p.getProperty("outputDir");
 	}
 	
+	public void setOutputDir(String outputDir){
+		p.setProperty("outputDir", outputDir);
+	}
+	
 	/**
 	 * 归一化, a_threshhold参数
 	 * @return
@@ -59,6 +79,10 @@ class InputArgument{
 	public String[] getAthreshholdArray(){
 		//System.out.println("a_threshhold_array = " + Arrays.toString(p.getProperty("a_threshhold_array").split(",")));
 		return p.getProperty("a_threshhold_array").split(",");
+	}
+	
+	public void setAthreshholdArray(String a_threshhold_array){
+		p.setProperty("a_threshhold_array", a_threshhold_array);
 	}
 }
 

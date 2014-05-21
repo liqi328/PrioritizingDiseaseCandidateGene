@@ -48,11 +48,12 @@ public abstract class AbstractStatistic{
 		int count = 0;
 		List<File> retFileList = parseResultFiles();
 		for(File file : retFileList){
-			System.out.println(file);
+			//System.out.println(file);
 			
 			List<Rank> rankList = readRankList(file);
 			if(!isCanStatistic(rankList)){
 				++count;
+				System.out.println(file);
 				continue;
 			}
 			
@@ -61,13 +62,13 @@ public abstract class AbstractStatistic{
 				result.totalValidation++;
 			}
 		}
-		System.out.println("< 4 total = " + count);
+		System.out.println("< 2 total = " + count);
 		
 		return result;
 	}
 	
 	private boolean isCanStatistic(List<Rank> rankList){
-		if(rankList.size() < 4){
+		if(rankList.size() < 2){
 			return false;
 		}
 		return true;
