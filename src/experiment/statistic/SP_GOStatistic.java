@@ -35,12 +35,12 @@ public class SP_GOStatistic extends AbstractStatistic {
 	protected String run_ranking_statistic(File dir, int top_k) {
 		StringBuffer sb = new StringBuffer();
 		
-		String[] a_threshholdArray = new String[]{"0.9", "0.8", "0.7", "0.6", 
-				"0.5", "0.4", "0.3", "0.2", "0.1"};
+		String[] a_threshholdArray = new String[]{"1.0", "0.9", "0.8", "0.7", "0.6", 
+				"0.5", "0.4", "0.3", "0.2", "0.1", "0.0"};
 		
 		for(String a_threshhold : a_threshholdArray){
 			File[] files = FileUtil.getFileList(dir.getPath(), createFileFilter("spgo_candidate_gene_rank_" + a_threshhold));
-			sb.append("SPGO_").append(a_threshhold).append("\t");
+			sb.append("SPGOranker_").append(a_threshhold).append("\t");
 			for(File file : files){
 				sb.append(readRankingGene(file, top_k)).append("\n");
 			}

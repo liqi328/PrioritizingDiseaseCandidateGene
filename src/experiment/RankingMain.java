@@ -35,13 +35,13 @@ public class RankingMain {
 				GraphUtil.transformGraphNodeIndex2Name(g, candidateGeneSet)); 
 		
 		List<AbstractExperiment> expList = new ArrayList<AbstractExperiment>();
-		expList.add(new ExperimentICN(input));
-		expList.add(new ExperimentVS(input));
-		expList.add(new ExperimentSP(input));
-		expList.add(new ExperimentGO(input));
-		
+//		expList.add(new ExperimentICN(input));
+//		expList.add(new ExperimentVS(input));
+//		expList.add(new ExperimentSP(input));
+//		expList.add(new ExperimentGO(input));
+//		
 		expList.add(new ExperimentSP_GO(input));
-		expList.add(new ExperimentVS_GO(input));
+//		expList.add(new ExperimentVS_GO(input));
 		
 		for(AbstractExperiment exp: expList){
 			exp.ranking(g, diseaseGeneSet, candidateGeneSet);

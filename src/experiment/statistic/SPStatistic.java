@@ -36,7 +36,7 @@ public class SPStatistic extends AbstractStatistic {
 		StringBuffer sb = new StringBuffer();
 		
 		File[] files = FileUtil.getFileList(dir.getPath(), createFileFilter(""));
-		sb.append("SP\t");
+		sb.append("SPranker\t");
 		for(File file : files){
 			sb.append(readRankingGene(file, top_k));
 		}

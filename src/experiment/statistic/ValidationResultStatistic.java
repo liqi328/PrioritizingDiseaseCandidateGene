@@ -71,6 +71,34 @@ public class ValidationResultStatistic {
 		StatisticResultAnalysis.calculateRankCutoff(dirName + File.separator + "rank_cutoff.txt", resultMap);
 	}
 	
+	
+	public static void run(String dirName){
+		File[] dirs = FileUtil.getDirectoryList(dirName);
+		//print_files(dirs);
+		
+		Map<String, StatisticResult> resultMap = new LinkedHashMap<String, StatisticResult>();
+		
+		AbstractStatistic statisticStrategy = new SPStatistic(dirs);
+//		StatisticResult result = statisticStrategy.run();
+//		resultMap.put("SPranker", result);
+		
+		
+		StatisticResult result = null;
+		String[] a_threshholdArray = new String[]{"1.0", "0.9", "0.8", "0.7", "0.6", 
+				"0.5", "0.4", "0.3", "0.2", "0.1", "0.0"};
+		
+		statisticStrategy = new SP_GOStatistic(dirs);
+		for(String a_threshhold : a_threshholdArray){
+			statisticStrategy.setAthreshhold(a_threshhold);
+			result = statisticStrategy.run();
+			resultMap.put("SPGOranker_" + a_threshhold, result);
+		}		
+		
+		StatisticResultAnalysis.writeStatisticResultMap(dirName + File.separator + "SPGOranker_statistic.txt", resultMap);
+		
+		StatisticResultAnalysis.calculateRankCutoff(dirName + File.separator + "SPGOranker_rank_cutoff.txt", resultMap);
+	}
+	
 	private static void print_files(File[] dirs){
 		for(File dir: dirs){
 			System.out.println(dir);
@@ -83,6 +111,14 @@ public class ValidationResultStatistic {
 	
 	
 	public static void main(String[] args){
-		run();
+		if(args.length != 1){
+			System.out.println("Argument Error.");
+			System.out.println("Using method: java -jar Prioritizing.jar ./output");
+			System.exit(-1);
+		}
+		
+		//String dirName = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/output_hprd";
+		//run(dirName);
+		run(args[0]);
 	}
 }
