@@ -9,9 +9,9 @@ import util.FileUtil;
 
 public class ValidationResultStatistic {
 	
-	public static void run(){
+	public static void run(String dirName){
 		//String dirName = "./ppi_symbol/output";
-		String dirName = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/output_hprd";
+		//String dirName = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/orphanet_experiment/output_hprd";
 		//String dirName = "E:/2013疾病研究/实验数据/prioritizing_candidate_gene/神经退行性疾病/output_hprd";
 		File[] dirs = FileUtil.getDirectoryList(dirName);
 		//print_files(dirs);
@@ -31,32 +31,32 @@ public class ValidationResultStatistic {
 		}
 		
 		
-		statisticStrategy = new SPStatistic(dirs);
-		result = statisticStrategy.run();
-		resultMap.put("SP", result);
-		
-		statisticStrategy = new GOStatistic(dirs);
-		result = statisticStrategy.run();
-		resultMap.put("GO", result);
-		
-		String[] a_threshholdArray = new String[]{"0.9", "0.8", "0.7", "0.6", 
-				"0.5", "0.4", "0.3", "0.2", "0.1"};
+//		statisticStrategy = new SPStatistic(dirs);
+//		result = statisticStrategy.run();
+//		resultMap.put("SP", result);
+//		
+//		statisticStrategy = new GOStatistic(dirs);
+//		result = statisticStrategy.run();
+//		resultMap.put("GO", result);
+//		
+//		String[] a_threshholdArray = new String[]{"0.9", "0.8", "0.7", "0.6", 
+//				"0.5", "0.4", "0.3", "0.2", "0.1"};
 		
 		//String[] a_threshholdArray = new String[]{"0.8", " 0.7", " 0.3", " 0.2"};
 		
-		statisticStrategy = new VS_GOStatistic(dirs);
-		for(String a_threshhold : a_threshholdArray){
-			statisticStrategy.setAthreshhold(a_threshhold);
-			result = statisticStrategy.run();
-			resultMap.put("VS_GO_" + a_threshhold, result);
-		}
-		
-		statisticStrategy = new SP_GOStatistic(dirs);
-		for(String a_threshhold : a_threshholdArray){
-			statisticStrategy.setAthreshhold(a_threshhold);
-			result = statisticStrategy.run();
-			resultMap.put("SP_GO_" + a_threshhold, result);
-		}
+//		statisticStrategy = new VS_GOStatistic(dirs);
+//		for(String a_threshhold : a_threshholdArray){
+//			statisticStrategy.setAthreshhold(a_threshhold);
+//			result = statisticStrategy.run();
+//			resultMap.put("VS_GO_" + a_threshhold, result);
+//		}
+//		
+//		statisticStrategy = new SP_GOStatistic(dirs);
+//		for(String a_threshhold : a_threshholdArray){
+//			statisticStrategy.setAthreshhold(a_threshhold);
+//			result = statisticStrategy.run();
+//			resultMap.put("SP_GO_" + a_threshhold, result);
+//		}
 		
 /*		statisticStrategy = new SP_NeighborStatistic(dirs);
 		for(String a_threshhold : a_threshholdArray){
@@ -66,13 +66,13 @@ public class ValidationResultStatistic {
 		}*/
 		
 		
-		StatisticResultAnalysis.writeStatisticResultMap(dirName + File.separator + "statistic.txt", resultMap);
+		StatisticResultAnalysis.writeStatisticResultMap(dirName + File.separator + "ICN-VS_statistic.txt", resultMap);
 		
-		StatisticResultAnalysis.calculateRankCutoff(dirName + File.separator + "rank_cutoff.txt", resultMap);
+		StatisticResultAnalysis.calculateRankCutoff(dirName + File.separator + "ICN-VS_rank_cutoff.txt", resultMap);
 	}
 	
 	
-	public static void run(String dirName){
+	public static void run(String dirName, String dirName2){
 		File[] dirs = FileUtil.getDirectoryList(dirName);
 		//print_files(dirs);
 		
@@ -113,7 +113,7 @@ public class ValidationResultStatistic {
 	public static void main(String[] args){
 		if(args.length != 1){
 			System.out.println("Argument Error.");
-			System.out.println("Using method: java -jar Prioritizing.jar ./output");
+			System.out.println("Using method: java -jar Prioritization.jar ./output");
 			System.exit(-1);
 		}
 		

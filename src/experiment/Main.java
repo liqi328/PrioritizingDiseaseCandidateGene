@@ -109,9 +109,9 @@ public class Main {
 		WriterUtil.write(input.getOutputDir() + "random_candidate_gene.txt",
 				GraphUtil.transformGraphNodeIndex2Name(g, candidateGeneSet)); 
 		
-		//run_single_method(input, g, diseaseGeneSeedSet, candidateGeneSet);
+		run_single_method(input, g, diseaseGeneSeedSet, candidateGeneSet);
 		
-		run_combined_method(input, g, diseaseGeneSeedSet, candidateGeneSet);
+		//run_combined_method(input, g, diseaseGeneSeedSet, candidateGeneSet);
 		//AbstractExperiment experiment = new ExperimentSD(input);
 		//experiment.run(g, diseaseGeneSeedSet, candidateGeneSet);
 	}
@@ -119,11 +119,11 @@ public class Main {
 	public static void run_single_method(InputArgument input, Graph g, Set<Integer> diseaseGeneSeedSet,
 			Set<Integer> candidateGeneSet){
 		List<AbstractExperiment> expList = new ArrayList<AbstractExperiment>();
-		//expList.add(new ExperimentICN(input));
+		expList.add(new ExperimentICN(input));
 		//expList.add(new ExperimentECC(input));
 		//expList.add(new ExperimentGO(input));
-		//expList.add(new ExperimentVS(input));
-		expList.add(new ExperimentSP(input));
+		expList.add(new ExperimentVS(input));
+		//expList.add(new ExperimentSP(input));
 		
 		for(AbstractExperiment exp: expList){
 			exp.run(g, diseaseGeneSeedSet, candidateGeneSet);

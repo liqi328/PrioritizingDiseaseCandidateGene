@@ -1,5 +1,7 @@
 package experiment.statistic;
 
+import id.HprdIdMappingUtil;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,14 +11,19 @@ import util.WriterUtil;
 
 public class RankingResultStatistic {
 	public static void main(String[] args){
-		if(args.length != 1){
+		if(args.length != 2){
 			System.out.println("Argument Error.");
-			System.out.println("Using method: java -jar SPranker_TopPrediction.jar ./output");
+			System.out.println("Using method: java -jar SPranker_TopPrediction.jar ./output ./example/HPRD_ID_MAPPINGS.txt");
 			System.exit(-1);
 		}
 		
+		initHprdIdMapping(args[1]);
 		run_1(args[0]);
 		//run_2();
+	}
+	
+	private static void initHprdIdMapping(String hprdIdMapppingFilepath){
+		HprdIdMappingUtil.setHprdIdMappingFilePath(hprdIdMapppingFilepath);
 	}
 	
 	private static void run_1(String dirName){
